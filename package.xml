@@ -22,7 +22,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-03-20</date>
+ <date>2017-10-17</date>
  <version>
   <release>2.2.10</release>
   <api>2.2.0</api>
@@ -37,13 +37,6 @@
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <dir name="doc">
-    <dir name="Horde">
-     <dir name="SessionHandler">
-      <file name="COPYING" role="doc" />
-     </dir> <!-- /doc/Horde/SessionHandler -->
-    </dir> <!-- /doc/Horde -->
-   </dir> <!-- /doc -->
    <dir name="lib">
     <dir name="Horde">
      <dir name="SessionHandler">
@@ -101,6 +94,7 @@
      </dir> <!-- /test/Horde/SessionHandler -->
     </dir> <!-- /test/Horde -->
    </dir> <!-- /test -->
+   <file name="LICENSE" role="doc" />
   </dir> <!-- / -->
  </contents>
  <dependencies>
@@ -168,7 +162,6 @@
  </dependencies>
  <phprelease>
   <filelist>
-   <install as="COPYING" name="doc/Horde/SessionHandler/COPYING" />
    <install as="Horde/SessionHandler.php" name="lib/Horde/SessionHandler.php" />
    <install as="Horde/SessionHandler/Exception.php" name="lib/Horde/SessionHandler/Exception.php" />
    <install as="Horde/SessionHandler/Storage.php" name="lib/Horde/SessionHandler/Storage.php" />
@@ -180,6 +173,7 @@
    <install as="Horde/SessionHandler/Storage/Mongo.php" name="lib/Horde/SessionHandler/Storage/Mongo.php" />
    <install as="Horde/SessionHandler/Storage/Sql.php" name="lib/Horde/SessionHandler/Storage/Sql.php" />
    <install as="Horde/SessionHandler/Storage/Stack.php" name="lib/Horde/SessionHandler/Storage/Stack.php" />
+   <install as="LICENSE" name="LICENSE" />
    <install as="migration/1_horde_sessionhandler_base_tables.php" name="migration/Horde/SessionHandler/1_horde_sessionhandler_base_tables.php" />
    <install as="migration/2_horde_sessionhandler_fix_blob_length.php" name="migration/Horde/SessionHandler/2_horde_sessionhandler_fix_blob_length.php" />
    <install as="Horde/SessionHandler/AllTests.php" name="test/Horde/SessionHandler/AllTests.php" />
@@ -192,7 +186,6 @@
    <install as="Horde/SessionHandler/Storage/FileTest.php" name="test/Horde/SessionHandler/Storage/FileTest.php" />
    <install as="Horde/SessionHandler/Storage/MemcacheTest.php" name="test/Horde/SessionHandler/Storage/MemcacheTest.php" />
    <install as="Horde/SessionHandler/Storage/MongoTest.php" name="test/Horde/SessionHandler/Storage/MongoTest.php" />
-   <install as="Horde/SessionHandler/Storage/StackTest.php" name="test/Horde/SessionHandler/Storage/StackTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Base.php" name="test/Horde/SessionHandler/Storage/Sql/Base.php" />
    <install as="Horde/SessionHandler/Storage/Sql/MysqliTest.php" name="test/Horde/SessionHandler/Storage/Sql/MysqliTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/MysqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/MysqlTest.php" />
@@ -200,6 +193,7 @@
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/MysqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/MysqlTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/PgsqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/PgsqlTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/SqliteTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/SqliteTest.php" />
+   <install as="Horde/SessionHandler/Storage/StackTest.php" name="test/Horde/SessionHandler/Storage/StackTest.php" />
   </filelist>
  </phprelease>
  <changelog>
@@ -645,7 +639,7 @@ Initial release as a PEAR package
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-03-20</date>
+   <date>2017-10-17</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * 
