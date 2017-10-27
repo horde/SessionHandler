@@ -1,0 +1,246 @@
+-----------
+v2.2.10-git
+-----------
+
+
+------
+v2.2.9
+------
+
+[jan] Fix MongoDB backend with mongodb extension.
+[jan] Fix returning session ID when using a PostgreSQL backend.
+
+
+------
+v2.2.8
+------
+
+[jan] Fix tests for PHP 7.1.
+[jan] Add Mongo test.
+[jan] Run Memcache tests on PHP 7 too.
+
+
+------
+v2.2.7
+------
+
+[jan] Mark PHP 7 as supported.
+
+
+------
+v2.2.6
+------
+
+[jan] Fix updating large files in Oracle backends.
+[jan] Fix writing big session data to Oracle (Bug #14175).
+
+
+------
+v2.2.5
+------
+
+[jan] Catch possible exceptions in shutdown methods.
+[jan] Test environment improvements.
+
+
+------
+v2.2.4
+------
+
+[mms] More efficient reading of session data from filesystem in file driver.
+
+
+------
+v2.2.3
+------
+
+[mms] Fix session ID tracking for the Hashtable driver.
+
+
+------
+v2.2.2
+------
+
+[mms] Fix rare race condition when creating file-based session data for the
+      first time (Thomas Jarosch <thomas.jarosch@intra2net.com; Bug #12557).
+
+
+------
+v2.2.1
+------
+
+[mms] More robust way of checking for locking in a HashTable instance.
+
+
+------
+v2.2.0
+------
+
+[mms] Horde_Memcache driver is now deprecated in favor of the Horde_HashTable
+      driver.
+[mms] Added Horde_HashTable driver.
+[mms] Implement logging for all storage drivers.
+
+
+------
+v2.1.0
+------
+
+[mms] Add MongoDB driver.
+
+
+------
+v2.0.2
+------
+
+[jan] Fix unit tests.
+
+
+------
+v2.0.1
+------
+
+[mms] Use new Horde_Test layout.
+
+
+------
+v2.0.0
+------
+
+First stable release for Horde 5.
+
+
+-----------
+v2.0.0beta2
+-----------
+
+[jan] Fix track_lifetime setting for Memcache driver (Bug #11444).
+
+
+-----------
+v2.0.0beta1
+-----------
+
+First beta release for Horde 5.
+
+
+------------
+v2.0.0alpha1
+------------
+
+First alpha release for Horde 5.
+
+
+------
+v1.0.5
+------
+
+[jan] Fix SQL driver with PostgreSQL.
+[jan] Fix reading sessions with the External driver.
+[jan] Add test suite.
+
+
+------
+v1.0.4
+------
+
+[jan] Don't start transaction more than once in SQL driver (Bug #10978).
+
+
+------
+v1.0.3
+------
+
+[jan] Fix transaction error when reconnecting to database during session
+      writing (Bug #10906).
+
+
+------
+v1.0.2
+------
+
+[jan] Use portable queries in SQL session handler (Bug #10574).
+
+
+------
+v1.0.1
+------
+
+[mms] Call garbage collection before grabbing list of active sessions.
+[mms] Fix obtaining session information from more than one session.
+
+
+------
+v1.0.0
+------
+
+First stable release for Horde 4.
+
+
+---------
+v1.0.0RC2
+---------
+
+Second release candidate for Horde 4.
+
+
+---------
+v1.0.0RC1
+---------
+
+First release candidate for Horde 4.
+
+
+-----------
+v1.0.0beta1
+-----------
+
+Workaround PHP < 5.2.6 (broken stream handling) (Bug #9644).
+
+
+------------
+v1.0.0alpha1
+------------
+
+First alpha release for Horde 4.
+Added 'File' driver.
+Abstracted storage-specific code into 'Storage' drivers.
+Removed LDAP driver
+Abstracted memcache persistent-backend code into 'Stack' driver.
+Renamed 'none' driver to 'Builtin'.
+Now throws Horde_SessionHandler_Exception.
+Split driver code into abstract class.
+Use horde/Db to access SQL databases.
+Do not rely on Horde::logMessage().
+Removed Horde-specific session counting script.
+
+
+------
+v0.0.3
+------
+
+Fixed garbage collection checking for SQL backends.
+Memcache driver no longer uses value in session.gc_maxlifetime as the lifetime
+      value.
+Add memcache caching support to all other backends.
+Only write to backend if session data has changed
+Locking in memcache driver implemented via memcache itself
+Support LDAPv3 in the LDAP backend (Bug #5864)
+Converted to package.xml 2.0 for pear.horde.org
+
+
+------
+v0.0.2
+------
+
+Renamed memcached.php to memcache.php for consistency with other drivers and
+      applications.
+Add support for separate read and write DB servers for the sql driver.
+Add support for locking in the memcache driver (Bug #2913).
+
+
+------
+v0.0.1
+------
+
+Initial release as a PEAR package

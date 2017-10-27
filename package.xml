@@ -22,7 +22,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-10-20</date>
+ <date>2017-10-27</date>
  <version>
   <release>2.2.10</release>
   <api>2.2.0</api>
@@ -36,6 +36,13 @@
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name="doc">
+    <dir name="Horde">
+     <dir name="SessionHandler">
+      <file name="CHANGES" role="doc" />
+     </dir> <!-- /doc/Horde/SessionHandler -->
+    </dir> <!-- /doc/Horde -->
+   </dir> <!-- /doc -->
    <dir name="lib">
     <dir name="Horde">
      <dir name="SessionHandler">
@@ -160,6 +167,7 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="CHANGES" name="doc/Horde/SessionHandler/CHANGES" />
    <install as="Horde/SessionHandler.php" name="lib/Horde/SessionHandler.php" />
    <install as="Horde/SessionHandler/Exception.php" name="lib/Horde/SessionHandler/Exception.php" />
    <install as="Horde/SessionHandler/Storage.php" name="lib/Horde/SessionHandler/Storage.php" />
@@ -636,7 +644,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-20</date>
+   <date>2017-10-27</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
    </notes>
