@@ -1,0 +1,369 @@
+---
+2.2.10:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-10-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes:
+2.2.9:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-02-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix MongoDB backend with mongodb extension.
+    [jan] Fix returning session ID when using a PostgreSQL backend.
+2.2.8:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-09-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix tests for PHP 7.1.
+    [jan] Add Mongo test.
+    [jan] Run Memcache tests on PHP 7 too.
+2.2.7:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-02-02
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Mark PHP 7 as supported.
+2.2.6:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-01-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix updating large files in Oracle backends.
+    [jan] Fix writing big session data to Oracle (Bug #14175).
+2.2.5:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-10-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Catch possible exceptions in shutdown methods.
+    [jan] Test environment improvements.
+2.2.4:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-03-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] More efficient reading of session data from filesystem in file driver.
+2.2.3:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix session ID tracking for the Hashtable driver.
+2.2.2:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix rare race condition when creating file-based session data for the first time (Thomas Jarosch <thomas.jarosch@intra2net.com; Bug #12557).
+2.2.1:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-07-23
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] More robust way of checking for locking in a HashTable instance.
+2.2.0:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-06-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Horde_Memcache driver is now deprecated in favor of the Horde_HashTable driver.
+    [mms] Added Horde_HashTable driver.
+    [mms] Implement logging for all storage drivers.
+2.1.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add MongoDB driver.
+2.0.2:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix unit tests.
+2.0.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Use new Horde_Test layout.
+2.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 5.
+2.0.0beta2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-10-12
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix track_lifetime setting for Memcache driver (Bug #11444).
+2.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-07-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First beta release for Horde 5.
+2.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: stable
+  date: 2012-07-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First alpha release for Horde 5.
+1.0.5:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-04-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix SQL driver with PostgreSQL.
+    [jan] Fix reading sessions with the External driver.
+    [jan] Add test suite.
+1.0.4:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Don't start transaction more than once in SQL driver (Bug #10978).
+1.0.3:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-01-31
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix transaction error when reconnecting to database during session writing (Bug #10906).
+1.0.2:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-10-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Use portable queries in SQL session handler (Bug #10574).
+1.0.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-09-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Call garbage collection before grabbing list of active sessions.
+    [mms] Fix obtaining session information from more than one session.
+1.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 4.
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Second release candidate for Horde 4.
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First release candidate for Horde 4.
+1.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Workaround PHP < 5.2.6 (broken stream handling) (Bug #9644).
+1.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2011-03-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First alpha release for Horde 4.
+    Added 'File' driver.
+    Abstracted storage-specific code into 'Storage' drivers.
+    Removed LDAP driver
+    Abstracted memcache persistent-backend code into 'Stack' driver.
+    Renamed 'none' driver to 'Builtin'.
+    Now throws Horde_SessionHandler_Exception.
+    Split driver code into abstract class.
+    Use horde/Db to access SQL databases.
+    Do not rely on Horde::logMessage().
+    Removed Horde-specific session counting script.
+0.0.3:
+  api: 0.0.3
+  state:
+    release: alpha
+    api: alpha
+  date: 2006-05-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Fixed garbage collection checking for SQL backends.
+    Memcache driver no longer uses value in session.gc_maxlifetime as the lifetime value.
+    Add memcache caching support to all other backends.
+    Only write to backend if session data has changed
+    Locking in memcache driver implemented via memcache itself
+    Support LDAPv3 in the LDAP backend (Bug #5864)
+    Converted to package.xml 2.0 for pear.horde.org
+0.0.2:
+  api: 0.0.2
+  state:
+    release: alpha
+    api: alpha
+  date: 2004-01-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Renamed memcached.php to memcache.php for consistency with other drivers and applications.
+    Add support for separate read and write DB servers for the sql driver.
+    Add support for locking in the memcache driver (Bug #2913).
+0.0.1:
+  api: 0.0.1
+  state:
+    release: alpha
+    api: alpha
+  date: 2003-07-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Initial release as a PEAR package
