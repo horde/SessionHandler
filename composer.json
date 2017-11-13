@@ -1,8 +1,8 @@
 {
     "name": "horde/sessionhandler",
-    "description": "Horde Session Handler API",
+    "description": "Session handler library",
     "type": "library",
-    "homepage": "https://pear.horde.org",
+    "homepage": "https://www.horde.org/libraries/Horde_SessionHandler",
     "license": "LGPL-2.1",
     "authors": [
         {
@@ -22,7 +22,7 @@
         }
     ],
     "version": "2.2.10",
-    "time": "2017-10-20",
+    "time": "2017-11-11",
     "repositories": [
         {
             "type": "pear",
