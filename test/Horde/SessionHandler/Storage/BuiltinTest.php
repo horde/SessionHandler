@@ -15,29 +15,29 @@ require_once dirname(__FILE__) . '/Base.php';
  */
 class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Storage_Base
 {
+    /**
+     * @runInSeparateProcess
+     */
     public function testWrite()
     {
-        session_name('sessionname');
-        session_id('sessionid');
-        session_start();
-        $this->assertEmpty($_SESSION);
-        $_SESSION['sessiondata'] = 'foo';
-        session_write_close();
+        $this->_write();
     }
 
     /**
-     * @depends testWrite
+     * @runInSeparateProcess
      */
     public function testRead()
     {
+        $this->_write();
         $this->assertEquals('sessiondata|s:3:"foo";', self::$handler->read('sessionid'));
     }
 
     /**
-     * @depends testWrite
+     * @runInSeparateProcess
      */
     public function testReopen()
     {
+        $this->_write();
         session_write_close();
         session_name('sessionname');
         session_id('sessionid');
@@ -47,10 +47,11 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
     }
 
     /**
-     * @depends testWrite
+     * @runInSeparateProcess
      */
     public function testList()
     {
+        $this->_write();
         session_write_close();
         session_name('sessionname');
         session_id('sessionid2');
@@ -69,10 +70,11 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
     }
 
     /**
-     * @depends testList
+     * @runInSeparateProcess
      */
     public function testDestroy()
     {
+        $this->testList();
         session_name('sessionname');
         session_id('sessionid2');
         session_start();
@@ -86,10 +88,11 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
     }
 
     /**
-     * @depends testDestroy
+     * @runInSeparateProcess
      */
     public function testGc()
     {
+        $this->testDestroy();
         $this->probability = ini_get('session.gc_probability');
         $this->divisor     = ini_get('session.gc_divisor');
         $this->maxlifetime = ini_get('session.gc_maxlifetime');
@@ -100,6 +103,16 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
         session_start();
         $this->assertEquals(array(),
                             self::$handler->getSessionIDs());
+    }
+
+    protected function _write()
+    {
+        session_name('sessionname');
+        session_id('sessionid');
+        session_start();
+        $this->assertEmpty($_SESSION);
+        $_SESSION['sessiondata'] = 'foo';
+        session_write_close();
     }
 
     public static function setUpBeforeClass()
