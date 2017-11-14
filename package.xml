@@ -98,7 +98,6 @@
       <file name="AllTests.php" role="test" />
       <file name="bootstrap.php" role="test" />
       <file name="conf.php.dist" role="test" />
-      <file name="phpunit.xml" role="test" />
      </dir> <!-- /test/Horde/SessionHandler -->
     </dir> <!-- /test/Horde -->
    </dir> <!-- /test -->
@@ -187,7 +186,6 @@
    <install as="Horde/SessionHandler/AllTests.php" name="test/Horde/SessionHandler/AllTests.php" />
    <install as="Horde/SessionHandler/bootstrap.php" name="test/Horde/SessionHandler/bootstrap.php" />
    <install as="Horde/SessionHandler/conf.php.dist" name="test/Horde/SessionHandler/conf.php.dist" />
-   <install as="Horde/SessionHandler/phpunit.xml" name="test/Horde/SessionHandler/phpunit.xml" />
    <install as="Horde/SessionHandler/Storage/Base.php" name="test/Horde/SessionHandler/Storage/Base.php" />
    <install as="Horde/SessionHandler/Storage/BuiltinTest.php" name="test/Horde/SessionHandler/Storage/BuiltinTest.php" />
    <install as="Horde/SessionHandler/Storage/ExternalTest.php" name="test/Horde/SessionHandler/Storage/ExternalTest.php" />
