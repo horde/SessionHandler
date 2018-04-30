@@ -92,7 +92,6 @@ class Horde_SessionHandler
         $this->_storage = $storage;
 
         if (empty($this->_params['noset'])) {
-            ini_set('session.save_handler', 'user');
             session_set_save_handler(
                 array($this, 'open'),
                 array($this, 'close'),
