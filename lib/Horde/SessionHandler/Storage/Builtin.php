@@ -65,6 +65,20 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
      */
     public function destroy($id)
     {
+        try {
+            $di = new DirectoryIterator($this->_path);
+        } catch (UnexpectedValueException $e) {
+            return false;
+        }
+
+        foreach ($di as $val) {
+            /* Make sure we're dealing with files that start with sess_. */
+            if ($val->isFile() &&
+                ($val->getFilename() == 'sess_' . $id)) {
+                return unlink($val->getPathname());
+            }
+        }
+
         return false;
     }
 
