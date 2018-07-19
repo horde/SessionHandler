@@ -1,6 +1,9 @@
------------
-v2.2.10-git
------------
+------
+v2.3.0
+------
+
+[jan] Implement destroy() for builtin session handler.
+
 
 
 ------
