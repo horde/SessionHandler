@@ -22,9 +22,9 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2017-11-14</date>
+ <date>2018-07-19</date>
  <version>
-  <release>2.2.10</release>
+  <release>2.3.0</release>
   <api>2.2.0</api>
  </version>
  <stability>
@@ -33,7 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* 
+* [jan] Implement destroy() for builtin session handler.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -640,15 +640,15 @@
   </release>
   <release>
    <version>
-    <release>2.2.10</release>
+    <release>2.3.0</release>
     <api>2.2.0</api></version>
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-11-14</date>
+   <date>2018-07-19</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* [jan] Implement destroy() for builtin session handler.
    </notes>
   </release>
  </changelog>
