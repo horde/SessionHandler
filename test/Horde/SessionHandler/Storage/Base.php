@@ -9,7 +9,7 @@
 class Horde_SessionHandler_Storage_Base extends Horde_Test_Case
 {
     protected static $handler;
-    protected static $dir;
+    public static $dir;
 
     protected function _write()
     {
@@ -66,11 +66,6 @@ class Horde_SessionHandler_Storage_Base extends Horde_Test_Case
         $this->assertTrue(self::$handler->gc(-1));
         $this->assertEquals(array(),
                             self::$handler->getSessionIDs());
-    }
-
-    public static function setUpBeforeClass()
-    {
-        self::$dir = Horde_Util::createTempDir();
     }
 
     public static function tearDownAfterClass()

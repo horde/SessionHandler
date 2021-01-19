@@ -118,19 +118,7 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        session_cache_limiter('');
-        ini_set('session.use_cookies', 0);
-        ini_set('session.save_path', self::$dir);
         self::$handler = new Horde_SessionHandler_Storage_Builtin(array('path' => self::$dir));
-    }
-
-    public function tearDown()
-    {
-        if (isset($this->probability)) {
-            ini_set('session.gc_probability', $this->probability);
-            ini_set('session.gc_divisor', $this->divisor);
-            ini_set('session.gc_maxlifetime', $this->maxlifetime);
-        }
     }
 
     /**
@@ -146,7 +134,6 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
              session_id())) {
             session_destroy();
         }
-        session_name(ini_get('session.name'));
     }
 
 }
