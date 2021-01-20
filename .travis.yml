@@ -27,14 +27,14 @@ before_script:
     export SESSIONHANDLER_SQL_MYSQLI_TEST_CONFIG='{"sessionhandler":{"sql":{"mysqli":{"adapter":"mysqli","host":"localhost","username":"root","password":"","dbname":"test","charset":"utf-8"}}}}';
     export SESSIONHANDLER_SQL_PDO_MYSQL_TEST_CONFIG='{"sessionhandler":{"sql":{"pdo_mysql":{"adapter":"pdo_mysql","host":"localhost","username":"root","password":"","dbname":"test","charset":"utf-8"}}}}';
     export SESSIONHANDLER_SQL_PDO_PGSQL_TEST_CONFIG='{"sessionhandler":{"sql":{"pdo_pgsql":{"adapter":"pdo_pgsql","username":"postgres","password":"","dbname":"test","charset":"utf-8"}}}}';
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ];
+  - if [ "$TRAVIS_PHP_VERSION" == "8.0" ] || [ $(echo "$TRAVIS_PHP_VERSION 8.0" | tr " " "\n" | sort -V | head -n1) = "8.0" ];
     then
-        phpenv config-add .travis.php56.ini;
-    elif [ "$TRAVIS_PHP_VERSION" == "7.0" ] || [ $(echo "$TRAVIS_PHP_VERSION 7.0" | tr " " "\n" | sort -V | head -n1) = "7.0" ];
+        phpenv config-add .travis.php8.ini;
+        elif [ "$TRAVIS_PHP_VERSION" == "7.0" ] || [ $(echo "$TRAVIS_PHP_VERSION 7.0" | tr " " "\n" | sort -V | head -n1) = "7.0" ];
     then
         phpenv config-add .travis.php7.ini;
     else
-        phpenv config-add .travis.ini;
+        phpenv config-add .travis.php5.ini;
     fi
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
   - pear install channel://pear.horde.org/Horde_Test
