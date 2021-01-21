@@ -95,6 +95,7 @@
        <file name="StackTest.php" role="test" />
       </dir> <!-- /test/Horde/SessionHandler/Storage -->
       <file name="AllTests.php" role="test" />
+      <file name="Autoload.php" role="test" />
       <file name="bootstrap.php" role="test" />
       <file name="conf.php.dist" role="test" />
      </dir> <!-- /test/Horde/SessionHandler -->
