@@ -37,7 +37,7 @@ before_script:
         phpenv config-add .travis.php5.ini;
     fi
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
-  - pear install channel://pear.horde.org/Horde_Test
-  - pear install -a -B package.xml
+  - pear install --ignore-errors channel://pear.horde.org/Horde_Test
+  - pear install --ignore-errors -a -B package.xml
 script:
   - php $(pear config-get php_dir)/Horde/Test/vendor/phpunit/phpunit/phpunit
