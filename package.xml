@@ -22,7 +22,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-01-19</date>
+ <date>2021-02-17</date>
  <version>
   <release>2.3.1</release>
   <api>2.2.0</api>
@@ -95,6 +95,7 @@
        <file name="StackTest.php" role="test" />
       </dir> <!-- /test/Horde/SessionHandler/Storage -->
       <file name="AllTests.php" role="test" />
+      <file name="Autoload.php" role="test" />
       <file name="bootstrap.php" role="test" />
       <file name="conf.php.dist" role="test" />
      </dir> <!-- /test/Horde/SessionHandler -->
@@ -184,6 +185,7 @@
    <install as="migration/1_horde_sessionhandler_base_tables.php" name="migration/Horde/SessionHandler/1_horde_sessionhandler_base_tables.php" />
    <install as="migration/2_horde_sessionhandler_fix_blob_length.php" name="migration/Horde/SessionHandler/2_horde_sessionhandler_fix_blob_length.php" />
    <install as="Horde/SessionHandler/AllTests.php" name="test/Horde/SessionHandler/AllTests.php" />
+   <install as="Horde/SessionHandler/Autoload.php" name="test/Horde/SessionHandler/Autoload.php" />
    <install as="Horde/SessionHandler/bootstrap.php" name="test/Horde/SessionHandler/bootstrap.php" />
    <install as="Horde/SessionHandler/conf.php.dist" name="test/Horde/SessionHandler/conf.php.dist" />
    <install as="Horde/SessionHandler/Storage/Base.php" name="test/Horde/SessionHandler/Storage/Base.php" />
@@ -738,7 +740,7 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2021-01-19</date>
+   <date>2021-02-17</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * 
