@@ -24,7 +24,7 @@
  </lead>
  <date>2021-02-24</date>
  <version>
-  <release>3.0.0alpha1</release>
+  <release>3.0.0alpha2</release>
   <api>3.0.0alpha1</api>
  </version>
  <stability>
@@ -33,8 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* [jan] Fix compatibility with PHP 7.2 (PR #2).
-* [jan] Implement destroy() for builtin session handler.
+* 
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -153,6 +152,37 @@
   </filelist>
  </phprelease>
  <changelog>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   <release>
    <version>
     <release>0.0.1</release>
@@ -637,14 +667,29 @@
     <api>3.0.0alpha1</api>
    </version>
    <stability>
-    <release>alpha</release>
-    <api>alpha</api>
+    <release>stable</release>
+    <api>stable</api>
    </stability>
-   <date>2017-10-20</date>
+   <date>2021-02-24</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [jan] Fix compatibility with PHP 7.2 (PR #2).
 * [jan] Implement destroy() for builtin session handler.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha2</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* 
    </notes>
   </release>
  </changelog>
