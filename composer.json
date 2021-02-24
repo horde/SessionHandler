@@ -45,9 +45,6 @@
     "autoload": {
         "psr-0": {
             "Horde_SessionHandler": "lib/"
-        },
-        "psr-4": {
-            "Horde\\SessionHandler\\": "src/"
         }
     }
 }
