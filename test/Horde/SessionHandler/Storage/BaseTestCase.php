@@ -8,6 +8,7 @@
  */
 namespace Horde\SessionHandler\Storage;
 use \Horde_Test_Case as TestCase;
+use \Horde_Util;
 
 class BaseTestCase extends TestCase
 {

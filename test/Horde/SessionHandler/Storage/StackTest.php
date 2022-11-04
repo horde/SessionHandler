@@ -2,7 +2,10 @@
 /**
  * Prepare the test setup.
  */
-require_once dirname(__FILE__) . '/Base.php';
+namespace Horde\SessionHandler\Storage;
+use \Horde_SessionHandler_Storage_File;
+use \Horde_Util;
+use \Horde_SessionHandler_Storage_Stack;
 
 /**
  * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +16,7 @@ require_once dirname(__FILE__) . '/Base.php';
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-class Horde_SessionHandler_Storage_StackTest extends Horde_SessionHandler_Storage_Base
+class StackTest extends BaseTestCase
 {
     public static $reason;
 
@@ -62,7 +65,7 @@ class Horde_SessionHandler_Storage_StackTest extends Horde_SessionHandler_Storag
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -81,7 +84,7 @@ class Horde_SessionHandler_Storage_StackTest extends Horde_SessionHandler_Storag
         ));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$handler) {
             $this->markTestSkipped(self::$reason);

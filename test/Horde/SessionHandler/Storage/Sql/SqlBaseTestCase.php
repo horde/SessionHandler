@@ -2,7 +2,12 @@
 /**
  * Prepare the test setup.
  */
-require_once dirname(__FILE__) . '/../Base.php';
+namespace Horde\SessionHandler\Storage\Sql;
+use Horde\SessionHandler\Storage\BaseTestCase;
+use \Horde_Log_Logger;
+use \Horde_Log_Handler_Cli;
+use \Horde_Db_Migration_Migrator;
+use \Horde_SessionHandler_Storage_Sql;
 
 /**
  * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +18,7 @@ require_once dirname(__FILE__) . '/../Base.php';
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage_Base
+class SqlBaseTestCase extends BaseTestCase
 {
     protected static $db;
 
@@ -66,7 +71,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -90,7 +95,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         self::$handler = new Horde_SessionHandler_Storage_Sql(array('db' => self::$db));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$migrator) {
             self::$migrator->down();
@@ -102,7 +107,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         parent::tearDownAfterClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$db) {
             $this->markTestSkipped(self::$reason);

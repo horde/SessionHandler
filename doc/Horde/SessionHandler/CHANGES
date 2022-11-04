@@ -1,9 +1,29 @@
+------------
+v3.0.0alpha3
+------------
+
+[rla] Consolidated with H5 master and fixed metadata for PHP 8.
+|+
+
+
+------------
+v3.0.0alpha2
+------------
+
+|+
+
+------------
+v3.0.0alpha1
+------------
+
+[rla] Initial release for composer.
+
+
 ------
 v2.3.1
 ------
 
-
-
+|+
 
 ------
 v2.3.0

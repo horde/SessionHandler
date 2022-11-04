@@ -2,7 +2,7 @@
 /**
  * Prepare the test setup.
  */
-require_once dirname(__FILE__) . '/Base.php';
+namespace Horde\SessionHandler\Storage;
 
 /**
  * Copyright 2016-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/Base.php';
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-class Horde_SessionHandler_Storage_MongoTest extends Horde_SessionHandler_Storage_Base
+class MongoTest extends BaseTestCase
 {
     protected static $reason;
     protected static $mongo;
@@ -55,7 +55,7 @@ class Horde_SessionHandler_Storage_MongoTest extends Horde_SessionHandler_Storag
         $this->_destroy();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (($config = self::getConfig('SESSIONHANDLER_MONGO_TEST_CONFIG', __DIR__ . '/..')) &&
             isset($config['sessionhandler']['mongo'])) {
@@ -75,14 +75,14 @@ class Horde_SessionHandler_Storage_MongoTest extends Horde_SessionHandler_Storag
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$handler) {
             $this->markTestSkipped(self::$reason);
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$mongo) {
             self::$mongo->selectDB(null)->drop();

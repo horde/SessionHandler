@@ -2,7 +2,8 @@
 /**
  * Prepare the test setup.
  */
-require_once dirname(__FILE__) . '/Base.php';
+namespace Horde\SessionHandler\Storage;
+use \Horde_SessionHandler_Storage_Builtin;
 
 /**
  * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +14,7 @@ require_once dirname(__FILE__) . '/Base.php';
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Storage_Base
+class BuiltinTest extends BaseTestCase
 {
     /**
      * @runInSeparateProcess
@@ -115,16 +116,30 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
         session_write_close();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
+        if (!headers_sent()) {
+            session_cache_limiter('');
+            ini_set('session.use_cookies', 0);
+            ini_set('session.save_path', self::$dir);
+        }
         self::$handler = new Horde_SessionHandler_Storage_Builtin(array('path' => self::$dir));
+    }
+
+    public function tearDown(): void
+    {
+        if (isset($this->probability)) {
+            ini_set('session.gc_probability', $this->probability);
+            ini_set('session.gc_divisor', $this->divisor);
+            ini_set('session.gc_maxlifetime', $this->maxlifetime);
+        }
     }
 
     /**
      * @todo Rely on session_status() in H6.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         unset($_SESSION);
@@ -133,6 +148,9 @@ class Horde_SessionHandler_Storage_BuiltinTest extends Horde_SessionHandler_Stor
             (!function_exists('session_status') &&
              session_id())) {
             session_destroy();
+        }
+        if (!headers_sent()) {
+            session_name(ini_get('session.name'));
         }
     }
 

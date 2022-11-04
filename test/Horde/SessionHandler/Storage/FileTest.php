@@ -2,7 +2,8 @@
 /**
  * Prepare the test setup.
  */
-require_once dirname(__FILE__) . '/Base.php';
+namespace Horde\SessionHandler\Storage;
+use \Horde_SessionHandler_Storage_File;
 
 /**
  * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
@@ -13,7 +14,7 @@ require_once dirname(__FILE__) . '/Base.php';
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-class Horde_SessionHandler_Storage_FileTest extends Horde_SessionHandler_Storage_Base
+class FileTest extends BaseTestCase
 {
     public function testWrite()
     {
@@ -60,7 +61,7 @@ class Horde_SessionHandler_Storage_FileTest extends Horde_SessionHandler_Storage
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$handler = new Horde_SessionHandler_Storage_File(array('path' => self::$dir));

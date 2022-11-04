@@ -28,24 +28,30 @@ authors:
     active: false
     role: lead
 version:
-  release: 2.3.1
-  api: 2.2.0
+  release: 3.0.0alpha3
+  api: 3.0.0alpha1
 state:
-  release: stable
-  api: stable
+  release: alpha
+  api: alpha
 license:
-  identifier: LGPL-2.1
+  identifier: LGPL-2.1-only
   uri: http://www.horde.org/licenses/lgpl21
 dependencies:
   required:
-    php: ^5.3 || ^7
-    pear:
-      pear.horde.org/Horde_Exception: ^2
-      pear.horde.org/Horde_Support: ^2
+    php: ^7.4 || ^8
+    composer:
+      horde/exception: ^3
+      horde/support: ^3
   optional:
-    pear:
-      pear.horde.org/Horde_Db: ^2.2
-      pear.horde.org/Horde_HashTable: ^1.1
-      pear.horde.org/Horde_Log: ^2
-      pear.horde.org/Horde_Mongo: ^1
-      pear.horde.org/Horde_Test: ^2.1
+    composer:
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/log: ^3
+      horde/mongo: ^2
+  dev:
+    composer:
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/log: ^3
+      horde/mongo: ^2
+      horde/test: ^3

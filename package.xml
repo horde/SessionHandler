@@ -22,21 +22,29 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-02-17</date>
+ <date>2022-11-04</date>
  <version>
-  <release>2.3.1</release>
-  <api>2.2.0</api>
+  <release>3.0.0alpha3</release>
+  <api>3.0.0alpha1</api>
  </version>
  <stability>
-  <release>stable</release>
-  <api>stable</api>
+  <release>alpha</release>
+  <api>alpha</api>
  </stability>
- <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+ <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
  <notes>
-* 
+* [rla] Consolidated with H5 master and fixed metadata for PHP 8.
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name=".github">
+    <dir name="workflows">
+     <file name="ci.yml" role="php" />
+     <file name="phpdoc.yml" role="php" />
+     <file name="update-satis.yml" role="php" />
+    </dir> <!-- /.github/workflows -->
+   </dir> <!-- /.github -->
    <dir name="doc">
     <dir name="Horde">
      <dir name="SessionHandler">
@@ -81,12 +89,13 @@
          <file name="PgsqlTest.php" role="test" />
          <file name="SqliteTest.php" role="test" />
         </dir> <!-- /test/Horde/SessionHandler/Storage/Sql/Pdo -->
-        <file name="Base.php" role="test" />
         <file name="MysqliTest.php" role="test" />
         <file name="MysqlTest.php" role="test" />
         <file name="Oci8Test.php" role="test" />
+        <file name="SqlBaseTestCase.php" role="test" />
        </dir> <!-- /test/Horde/SessionHandler/Storage/Sql -->
        <file name="Base.php" role="test" />
+       <file name="BaseTestCase.php" role="test" />
        <file name="BuiltinTest.php" role="test" />
        <file name="ExternalTest.php" role="test" />
        <file name="FileTest.php" role="test" />
@@ -95,7 +104,6 @@
        <file name="StackTest.php" role="test" />
       </dir> <!-- /test/Horde/SessionHandler/Storage -->
       <file name="AllTests.php" role="test" />
-      <file name="Autoload.php" role="test" />
       <file name="bootstrap.php" role="test" />
       <file name="conf.php.dist" role="test" />
      </dir> <!-- /test/Horde/SessionHandler -->
@@ -107,68 +115,20 @@
  <dependencies>
   <required>
    <php>
-    <min>5.3.0</min>
-    <max>8.0.0alpha1</max>
-    <exclude>8.0.0alpha1</exclude>
+    <min>7.4.0</min>
+    <max>9.0.0alpha1</max>
+    <exclude>9.0.0alpha1</exclude>
    </php>
    <pearinstaller>
     <min>1.7.0</min>
    </pearinstaller>
-   <package>
-    <name>Horde_Exception</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Support</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
   </required>
-  <optional>
-   <package>
-    <name>Horde_Db</name>
-    <channel>pear.horde.org</channel>
-    <min>2.2.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_HashTable</name>
-    <channel>pear.horde.org</channel>
-    <min>1.1.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Log</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mongo</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Test</name>
-    <channel>pear.horde.org</channel>
-    <min>2.1.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-  </optional>
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="workflows/ci.yml" name=".github/workflows/ci.yml" />
+   <install as="workflows/phpdoc.yml" name=".github/workflows/phpdoc.yml" />
+   <install as="workflows/update-satis.yml" name=".github/workflows/update-satis.yml" />
    <install as="CHANGES" name="doc/Horde/SessionHandler/CHANGES" />
    <install as="Horde/SessionHandler.php" name="lib/Horde/SessionHandler.php" />
    <install as="Horde/SessionHandler/Exception.php" name="lib/Horde/SessionHandler/Exception.php" />
@@ -185,57 +145,26 @@
    <install as="migration/1_horde_sessionhandler_base_tables.php" name="migration/Horde/SessionHandler/1_horde_sessionhandler_base_tables.php" />
    <install as="migration/2_horde_sessionhandler_fix_blob_length.php" name="migration/Horde/SessionHandler/2_horde_sessionhandler_fix_blob_length.php" />
    <install as="Horde/SessionHandler/AllTests.php" name="test/Horde/SessionHandler/AllTests.php" />
-   <install as="Horde/SessionHandler/Autoload.php" name="test/Horde/SessionHandler/Autoload.php" />
    <install as="Horde/SessionHandler/bootstrap.php" name="test/Horde/SessionHandler/bootstrap.php" />
    <install as="Horde/SessionHandler/conf.php.dist" name="test/Horde/SessionHandler/conf.php.dist" />
    <install as="Horde/SessionHandler/Storage/Base.php" name="test/Horde/SessionHandler/Storage/Base.php" />
+   <install as="Horde/SessionHandler/Storage/BaseTestCase.php" name="test/Horde/SessionHandler/Storage/BaseTestCase.php" />
    <install as="Horde/SessionHandler/Storage/BuiltinTest.php" name="test/Horde/SessionHandler/Storage/BuiltinTest.php" />
    <install as="Horde/SessionHandler/Storage/ExternalTest.php" name="test/Horde/SessionHandler/Storage/ExternalTest.php" />
    <install as="Horde/SessionHandler/Storage/FileTest.php" name="test/Horde/SessionHandler/Storage/FileTest.php" />
    <install as="Horde/SessionHandler/Storage/MemcacheTest.php" name="test/Horde/SessionHandler/Storage/MemcacheTest.php" />
    <install as="Horde/SessionHandler/Storage/MongoTest.php" name="test/Horde/SessionHandler/Storage/MongoTest.php" />
-   <install as="Horde/SessionHandler/Storage/Sql/Base.php" name="test/Horde/SessionHandler/Storage/Sql/Base.php" />
    <install as="Horde/SessionHandler/Storage/Sql/MysqliTest.php" name="test/Horde/SessionHandler/Storage/Sql/MysqliTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/MysqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/MysqlTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Oci8Test.php" name="test/Horde/SessionHandler/Storage/Sql/Oci8Test.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/MysqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/MysqlTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/PgsqlTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/PgsqlTest.php" />
    <install as="Horde/SessionHandler/Storage/Sql/Pdo/SqliteTest.php" name="test/Horde/SessionHandler/Storage/Sql/Pdo/SqliteTest.php" />
+   <install as="Horde/SessionHandler/Storage/Sql/SqlBaseTestCase.php" name="test/Horde/SessionHandler/Storage/Sql/SqlBaseTestCase.php" />
    <install as="Horde/SessionHandler/Storage/StackTest.php" name="test/Horde/SessionHandler/Storage/StackTest.php" />
   </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>0.0.1</release>
@@ -740,10 +669,56 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2021-02-17</date>
+   <date>2021-01-19</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* |+
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha1</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [rla] Initial release for composer.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha2</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* |+
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha3</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
+   <notes>
+* [rla] Consolidated with H5 master and fixed metadata for PHP 8.
+* |+
    </notes>
   </release>
  </changelog>
