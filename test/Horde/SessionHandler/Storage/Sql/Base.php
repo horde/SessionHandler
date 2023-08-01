@@ -66,7 +66,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -90,7 +90,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         self::$handler = new Horde_SessionHandler_Storage_Sql(array('db' => self::$db));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$migrator) {
             self::$migrator->down();
@@ -102,7 +102,7 @@ class Horde_SessionHandler_Storage_Sql_Base extends Horde_SessionHandler_Storage
         parent::tearDownAfterClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$db) {
             $this->markTestSkipped(self::$reason);

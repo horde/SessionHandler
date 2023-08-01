@@ -15,7 +15,7 @@ require_once dirname(__FILE__) . '/../Base.php';
  */
 class Horde_SessionHandler_Storage_Sql_Pdo_SqliteTest extends Horde_SessionHandler_Storage_Sql_Base
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $factory_db = new Horde_Test_Factory_Db();
 

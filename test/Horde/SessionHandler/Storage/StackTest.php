@@ -62,7 +62,7 @@ class Horde_SessionHandler_Storage_StackTest extends Horde_SessionHandler_Storag
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -81,7 +81,7 @@ class Horde_SessionHandler_Storage_StackTest extends Horde_SessionHandler_Storag
         ));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$handler) {
             $this->markTestSkipped(self::$reason);

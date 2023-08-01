@@ -54,7 +54,7 @@ class Horde_SessionHandler_Storage_MemcacheTest extends Horde_SessionHandler_Sto
         $this->_destroy();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!(extension_loaded('memcache') || extension_loaded('memcached'))) {
             self::$reason = 'No memcache extension.';
@@ -74,7 +74,7 @@ class Horde_SessionHandler_Storage_MemcacheTest extends Horde_SessionHandler_Sto
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$handler) {
             $this->markTestSkipped(self::$reason);

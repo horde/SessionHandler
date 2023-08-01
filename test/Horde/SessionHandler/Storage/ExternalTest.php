@@ -81,7 +81,7 @@ class Horde_SessionHandler_Storage_ExternalTest extends Horde_SessionHandler_Sto
         $this->assertSame('', self::$handler->read('sessionid'));
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $external = new Horde_SessionHandler_Storage_File(array('path' => self::$dir));

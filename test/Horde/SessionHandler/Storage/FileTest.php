@@ -60,7 +60,7 @@ class Horde_SessionHandler_Storage_FileTest extends Horde_SessionHandler_Storage
         $this->_gc();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$handler = new Horde_SessionHandler_Storage_File(array('path' => self::$dir));

@@ -68,7 +68,7 @@ class Horde_SessionHandler_Storage_Base extends Horde_Test_Case
                             self::$handler->getSessionIDs());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$handler = null;
     }

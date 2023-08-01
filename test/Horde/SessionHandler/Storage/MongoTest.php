@@ -55,7 +55,7 @@ class Horde_SessionHandler_Storage_MongoTest extends Horde_SessionHandler_Storag
         $this->_destroy();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (($config = self::getConfig('SESSIONHANDLER_MONGO_TEST_CONFIG', __DIR__ . '/..')) &&
             isset($config['sessionhandler']['mongo'])) {
@@ -75,14 +75,14 @@ class Horde_SessionHandler_Storage_MongoTest extends Horde_SessionHandler_Storag
         parent::setUpBeforeClass();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$handler) {
             $this->markTestSkipped(self::$reason);
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$mongo) {
             self::$mongo->selectDB(null)->drop();
