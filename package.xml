@@ -88,7 +88,6 @@
         <file name="Oci8Test.php" role="test" />
        </dir> <!-- /test/Horde/SessionHandler/Storage/Sql -->
        <file name="Base.php" role="test" />
-       <file name="BuiltinTest.php" role="test" />
        <file name="ExternalTest.php" role="test" />
        <file name="FileTest.php" role="test" />
        <file name="MemcacheTest.php" role="test" />
@@ -189,7 +188,6 @@
    <install as="Horde/SessionHandler/bootstrap.php" name="test/Horde/SessionHandler/bootstrap.php" />
    <install as="Horde/SessionHandler/conf.php.dist" name="test/Horde/SessionHandler/conf.php.dist" />
    <install as="Horde/SessionHandler/Storage/Base.php" name="test/Horde/SessionHandler/Storage/Base.php" />
-   <install as="Horde/SessionHandler/Storage/BuiltinTest.php" name="test/Horde/SessionHandler/Storage/BuiltinTest.php" />
    <install as="Horde/SessionHandler/Storage/ExternalTest.php" name="test/Horde/SessionHandler/Storage/ExternalTest.php" />
    <install as="Horde/SessionHandler/Storage/FileTest.php" name="test/Horde/SessionHandler/Storage/FileTest.php" />
    <install as="Horde/SessionHandler/Storage/MemcacheTest.php" name="test/Horde/SessionHandler/Storage/MemcacheTest.php" />
