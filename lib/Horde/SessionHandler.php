@@ -12,8 +12,29 @@
  * @license  http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package  SessionHandler
  */
-class Horde_SessionHandler
+class Horde_SessionHandler implements SessionHandlerInterface
 {
+    /**
+     * The session data.
+     *
+     * @var string
+     */
+    public $data = '';
+
+    /**
+     * The session identifier.
+     *
+     * @var string
+     */
+    public $id = '';
+
+    /**
+     * The session name.
+     *
+     * @var string
+     */
+    public $name = '';
+
     /**
      * If true, indicates the session data has changed.
      *
@@ -92,14 +113,7 @@ class Horde_SessionHandler
         $this->_storage = $storage;
 
         if (empty($this->_params['noset'])) {
-            session_set_save_handler(
-                array($this, 'open'),
-                array($this, 'close'),
-                array($this, 'read'),
-                array($this, 'write'),
-                array($this, 'destroy'),
-                array($this, 'gc')
-            );
+            session_set_save_handler($this);
         }
     }
 
@@ -122,7 +136,7 @@ class Horde_SessionHandler
      *
      * @return boolean  True on success, false otherwise.
      */
-    public function open($save_path = null, $session_name = null)
+    public function open($save_path = null, $session_name = null): bool
     {
         if (!$this->_connected) {
             try {
@@ -143,7 +157,7 @@ class Horde_SessionHandler
      *
      * @return boolean  True on success, false otherwise.
      */
-    public function close()
+    public function close(): bool
     {
         try {
             $this->_storage->close();
@@ -164,7 +178,7 @@ class Horde_SessionHandler
      *
      * @return string  The session data.
      */
-    public function read($id)
+    public function read($id): string|false
     {
         if (($result = $this->_storage->read($id)) == '') {
             $this->_logger->log('Error retrieving session data (' . $id . ')', 'DEBUG');
@@ -189,7 +203,7 @@ class Horde_SessionHandler
      *
      * @return boolean  True on success, false otherwise.
      */
-    public function write($id, $session_data)
+    public function write($id, $session_data): bool
     {
         if ($this->changed ||
             (empty($this->_params['no_md5']) &&
@@ -213,7 +227,7 @@ class Horde_SessionHandler
      *
      * @return boolean  True on success, false otherwise.
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         if ($this->_storage->destroy($id)) {
             $this->_logger->log('Session data destroyed (' . $id . ')', 'DEBUG');
@@ -233,7 +247,7 @@ class Horde_SessionHandler
      *
      * @return boolean  True on success, false otherwise.
      */
-    public function gc($maxlifetime = 300)
+    public function gc($maxlifetime = 300): int|false
     {
         return $this->_storage->gc($maxlifetime);
     }
