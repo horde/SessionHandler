@@ -1,4 +1,18 @@
 ---
+3.0.0-beta1:
+  api: 3.0.0-beta1
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-08
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    test: Add unit tests (with mocks) mimicking the integration tests (real IO)
+    test: Modernize test suite layout
+    chore: metadata
+    style: php-cs-fixer
 3.0.0-alpha4:
   api: 3.0.0-alpha1
   state:
