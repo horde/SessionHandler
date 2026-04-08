@@ -1,39 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 /**
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
+ *
  * @author     Jan Schneider <jan@horde.org>
- * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
+ * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
 
-namespace Horde\SessionHandler\Storage;
+namespace Horde\SessionHandler\Test\Unnamespaced;
 
-use Horde_Test_Case as TestCase;
+use Horde_SessionHandler_Storage;
 use Horde_Util;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @coversNothing
- */
-class BaseTestCase extends TestCase
+abstract class BaseTestCase extends TestCase
 {
-    protected static $handler;
-    protected static $dir;
+    protected static ?Horde_SessionHandler_Storage $handler = null;
+    protected static string $dir = '';
 
-    protected function _write()
+    protected function _write(): void
     {
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         $this->assertSame('', self::$handler->read('sessionid'));
         $this->assertTrue(self::$handler->write('sessionid', 'sessiondata'));
     }
 
-    protected function _read()
+    protected function _read(): void
     {
         $this->assertEquals('sessiondata', self::$handler->read('sessionid'));
     }
 
-    protected function _reopen()
+    protected function _reopen(): void
     {
         $this->assertTrue(self::$handler->close());
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
@@ -41,7 +46,7 @@ class BaseTestCase extends TestCase
         $this->assertTrue(self::$handler->close());
     }
 
-    protected function _list()
+    protected function _list(): void
     {
         $this->assertTrue(self::$handler->close());
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
@@ -61,7 +66,7 @@ class BaseTestCase extends TestCase
         $this->assertTrue(self::$handler->close());
     }
 
-    protected function _destroy()
+    protected function _destroy(): void
     {
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         self::$handler->read('sessionid2');
@@ -72,7 +77,7 @@ class BaseTestCase extends TestCase
         );
     }
 
-    protected function _gc()
+    protected function _gc(): void
     {
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         $this->assertTrue(self::$handler->gc(-1));
@@ -80,6 +85,33 @@ class BaseTestCase extends TestCase
             [],
             self::$handler->getSessionIDs()
         );
+    }
+
+    /**
+     * Load test configuration from environment variable or conf.php file.
+     *
+     * Replaces Horde_Test_Case::getConfig() to avoid horde/test dependency.
+     */
+    public static function getConfig(string $env, ?string $path = null): ?array
+    {
+        $config = getenv($env);
+        if ($config) {
+            $json = json_decode($config, true);
+            if ($json) {
+                return $json;
+            }
+        }
+
+        if ($path) {
+            $configFile = $path . '/conf.php';
+            if (file_exists($configFile)) {
+                $conf = [];
+                require $configFile;
+                return $conf;
+            }
+        }
+
+        return null;
     }
 
     public static function setUpBeforeClass(): void

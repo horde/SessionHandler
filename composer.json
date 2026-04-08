@@ -32,8 +32,7 @@
         "horde/db": "^3 || dev-FRAMEWORK_6_0",
         "horde/hashtable": "^2 || dev-FRAMEWORK_6_0",
         "horde/log": "^3 || dev-FRAMEWORK_6_0",
-        "horde/mongo": "^2 || dev-FRAMEWORK_6_0",
-        "horde/test": "^3 || dev-FRAMEWORK_6_0"
+        "horde/mongo": "^2 || dev-FRAMEWORK_6_0"
     },
     "suggest": {
         "horde/db": "^3 || dev-FRAMEWORK_6_0",
@@ -52,6 +51,9 @@
         }
     },
     "config": {
-        "allow-plugins": {}
-    }
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
+        }
+    },
+    "minimum-stability": "dev"
 }

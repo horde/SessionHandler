@@ -1,59 +1,59 @@
 <?php
 
-/**
- * Prepare the test setup.
- */
-
-namespace Horde\SessionHandler\Storage;
+declare(strict_types=1);
 
 /**
  * Copyright 2016-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
- * @coversNothing
  */
+
+namespace Horde\SessionHandler\Test\Integration;
+
+use Horde\SessionHandler\Test\Unnamespaced\BaseTestCase;
+use Horde_SessionHandler_Storage_Mongo;
+use Horde_Test_Factory_Mongo;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
+
+#[CoversClass(Horde_SessionHandler_Storage_Mongo::class)]
 class MongoTest extends BaseTestCase
 {
-    protected static $reason;
+    protected static string $reason = '';
     protected static $mongo;
 
-    public function testWrite()
+    public function testWrite(): void
     {
         $this->_write();
     }
 
-    /**
-     * @depends testWrite
-     */
-    public function testRead()
+    #[Depends('testWrite')]
+    public function testRead(): void
     {
         $this->_read();
     }
 
-    /**
-     * @depends testWrite
-     */
-    public function testReopen()
+    #[Depends('testWrite')]
+    public function testReopen(): void
     {
         $this->_reopen();
     }
 
-    /**
-     * @depends testWrite
-     */
-    public function testList()
+    #[Depends('testWrite')]
+    public function testList(): void
     {
         $this->_list();
     }
 
-    /**
-     * @depends testList
-     */
-    public function testDestroy()
+    #[Depends('testList')]
+    public function testDestroy(): void
     {
         $this->_destroy();
     }
