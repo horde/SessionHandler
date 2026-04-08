@@ -107,7 +107,7 @@ class HandlerTest extends TestCase
     public function testWriteSkipsWhenDataUnchanged(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('same-data');
+        $storage->expects($this->once())->method('read')->willReturn('same-data');
         // write should NOT be called because md5 signature matches
         $storage->expects($this->never())->method('write');
         $handler = new Horde_SessionHandler($storage, ['noset' => true]);
@@ -118,7 +118,7 @@ class HandlerTest extends TestCase
     public function testWriteProceedsWhenDataChanged(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('old-data');
+        $storage->expects($this->once())->method('read')->willReturn('old-data');
         $storage->expects($this->once())
             ->method('write')
             ->with('test-id', 'new-data')
@@ -131,7 +131,7 @@ class HandlerTest extends TestCase
     public function testWriteProceedsWhenChangedFlagSet(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('same-data');
+        $storage->expects($this->once())->method('read')->willReturn('same-data');
         $storage->expects($this->once())
             ->method('write')
             ->with('test-id', 'same-data')
@@ -145,7 +145,7 @@ class HandlerTest extends TestCase
     public function testWriteReturnsFalseOnStorageFailure(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('old-data');
+        $storage->expects($this->once())->method('read')->willReturn('old-data');
         $storage->expects($this->once())
             ->method('write')
             ->willReturn(false);
@@ -157,7 +157,7 @@ class HandlerTest extends TestCase
     public function testWriteSkipsMd5WhenNoMd5ParamSet(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('same-data');
+        $storage->expects($this->once())->method('read')->willReturn('same-data');
         // With no_md5, write should be skipped unless changed flag is set
         $storage->expects($this->never())->method('write');
         $handler = new Horde_SessionHandler($storage, ['noset' => true, 'no_md5' => true]);
@@ -168,7 +168,7 @@ class HandlerTest extends TestCase
     public function testWriteWithNoMd5AndChangedFlag(): void
     {
         $storage = $this->createMock(Horde_SessionHandler_Storage::class);
-        $storage->method('read')->willReturn('same-data');
+        $storage->expects($this->once())->method('read')->willReturn('same-data');
         $storage->expects($this->once())
             ->method('write')
             ->willReturn(true);
