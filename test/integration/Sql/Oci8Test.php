@@ -1,19 +1,26 @@
 <?php
 
-/**
- * Prepare the test setup.
- */
-
-namespace Horde\SessionHandler\Storage\Sql;
+declare(strict_types=1);
 
 /**
  * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
+ *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
- * @package    SessionHandler
+ * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ */
+
+namespace Horde\SessionHandler\Test\Integration\Sql;
+
+use Horde\SessionHandler\Test\Unnamespaced\SqlBaseTestCase;
+use Horde_Db_Adapter_Oci8;
+
+/**
  * @coversNothing
  */
 class Oci8Test extends SqlBaseTestCase
@@ -36,7 +43,7 @@ class Oci8Test extends SqlBaseTestCase
         parent::setUpBeforeClass();
     }
 
-    public function testLargeWrite()
+    public function testLargeWrite(): void
     {
         $this->assertTrue(self::$handler->open(self::$dir, 'sessiondata'));
         $this->assertSame('', self::$handler->read('largedata'));

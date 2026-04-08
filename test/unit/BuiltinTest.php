@@ -1,46 +1,49 @@
 <?php
 
-/**
- * Prepare the test setup.
- */
-
-namespace Horde\SessionHandler\Storage;
-
-use Horde_SessionHandler_Storage_Builtin;
+declare(strict_types=1);
 
 /**
  * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
- * @coversNothing
  */
-class BuiltinTest extends BaseTestCase
+
+namespace Horde\SessionHandler\Test\Unit;
+
+use Horde_SessionHandler_Storage_Builtin;
+use Horde_Util;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(Horde_SessionHandler_Storage_Builtin::class)]
+class BuiltinTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
-    public function testWrite()
+    protected static Horde_SessionHandler_Storage_Builtin $handler;
+    protected static string $dir;
+
+    #[RunInSeparateProcess]
+    public function testWrite(): void
     {
         $this->_write();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testRead()
+    #[RunInSeparateProcess]
+    public function testRead(): void
     {
         $this->_write();
         $this->assertEquals('sessiondata|s:3:"foo";', self::$handler->read('sessionid'));
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testReopen()
+    #[RunInSeparateProcess]
+    public function testReopen(): void
     {
         $this->_write();
         session_write_close();
@@ -51,10 +54,8 @@ class BuiltinTest extends BaseTestCase
         session_write_close();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testList()
+    #[RunInSeparateProcess]
+    public function testList(): void
     {
         $this->_write();
         session_write_close();
@@ -74,10 +75,8 @@ class BuiltinTest extends BaseTestCase
         $this->assertEquals(['sessionid', 'sessionid2'], $ids);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testDestroy()
+    #[RunInSeparateProcess]
+    public function testDestroy(): void
     {
         $this->testList();
         session_name('sessionname');
@@ -96,18 +95,13 @@ class BuiltinTest extends BaseTestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testGc()
+    #[RunInSeparateProcess]
+    public function testGc(): void
     {
         $this->testDestroy();
-        $this->probability = ini_get('session.gc_probability');
-        $this->divisor     = ini_get('session.gc_divisor');
-        $this->maxlifetime = ini_get('session.gc_maxlifetime');
-        ini_set('session.gc_probability', 100);
-        ini_set('session.gc_divisor', 1);
-        ini_set('session.gc_maxlifetime', -1);
+        ini_set('session.gc_probability', '100');
+        ini_set('session.gc_divisor', '1');
+        ini_set('session.gc_maxlifetime', '-1');
         session_name('sessionname');
         session_start();
         $this->assertEquals(
@@ -116,7 +110,7 @@ class BuiltinTest extends BaseTestCase
         );
     }
 
-    protected function _write()
+    protected function _write(): void
     {
         session_name('sessionname');
         session_id('sessionid');
@@ -128,40 +122,23 @@ class BuiltinTest extends BaseTestCase
 
     public static function setUpBeforeClass(): void
     {
-        parent::setUpBeforeClass();
+        self::$dir = Horde_Util::createTempDir();
         if (!headers_sent()) {
             session_cache_limiter('');
-            ini_set('session.use_cookies', 0);
+            ini_set('session.use_cookies', '0');
             ini_set('session.save_path', self::$dir);
         }
         self::$handler = new Horde_SessionHandler_Storage_Builtin(['path' => self::$dir]);
     }
 
-    public function tearDown(): void
-    {
-        if (isset($this->probability)) {
-            ini_set('session.gc_probability', $this->probability);
-            ini_set('session.gc_divisor', $this->divisor);
-            ini_set('session.gc_maxlifetime', $this->maxlifetime);
-        }
-    }
-
-    /**
-     * @todo Rely on session_status() in H6.
-     */
     public static function tearDownAfterClass(): void
     {
-        parent::tearDownAfterClass();
         unset($_SESSION);
-        if ((function_exists('session_status')
-             && session_status() == PHP_SESSION_ACTIVE)
-            || (!function_exists('session_status')
-             && session_id())) {
+        if (session_status() == PHP_SESSION_ACTIVE) {
             session_destroy();
         }
         if (!headers_sent()) {
             session_name(ini_get('session.name'));
         }
     }
-
 }

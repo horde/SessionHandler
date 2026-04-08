@@ -1,43 +1,44 @@
 <?php
 
-/**
- * Prepare the test setup.
- */
-
-namespace Horde\SessionHandler\Storage;
-
-use Horde_SessionHandler_Storage_File;
-use Horde_SessionHandler_Storage_External;
+declare(strict_types=1);
 
 /**
  * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
- * @coversNothing
  */
+
+namespace Horde\SessionHandler\Test\Unit;
+
+use Horde\SessionHandler\Test\Unnamespaced\BaseTestCase;
+use Horde_SessionHandler_Storage_External;
+use Horde_SessionHandler_Storage_File;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
+
+#[CoversClass(Horde_SessionHandler_Storage_External::class)]
 class ExternalTest extends BaseTestCase
 {
-    public function testWrite()
+    public function testWrite(): void
     {
         $this->_write();
     }
 
-    /**
-     * @depends testWrite
-     */
-    public function testRead()
+    #[Depends('testWrite')]
+    public function testRead(): void
     {
         $this->_read();
     }
 
-    /**
-     * @depends testWrite
-     */
-    public function testReopen()
+    #[Depends('testWrite')]
+    public function testReopen(): void
     {
         $this->_reopen();
     }
@@ -45,10 +46,9 @@ class ExternalTest extends BaseTestCase
     /**
      * The external driver doesn't support listing, so test for existing
      * sessions manually.
-     *
-     * @depends testWrite
      */
-    public function testList()
+    #[Depends('testWrite')]
+    public function testList(): void
     {
         self::$handler->close();
         self::$handler->open(self::$dir, 'sessionname');
@@ -66,10 +66,8 @@ class ExternalTest extends BaseTestCase
         self::$handler->close();
     }
 
-    /**
-     * @depends testList
-     */
-    public function testDestroy()
+    #[Depends('testList')]
+    public function testDestroy(): void
     {
         self::$handler->open(self::$dir, 'sessionname');
         self::$handler->read('sessionid2');
@@ -77,10 +75,8 @@ class ExternalTest extends BaseTestCase
         $this->assertSame('', self::$handler->read('sessionid2'));
     }
 
-    /**
-     * @depends testDestroy
-     */
-    public function testGc()
+    #[Depends('testDestroy')]
+    public function testGc(): void
     {
         self::$handler->open(self::$dir, 'sessionname');
         self::$handler->gc(-1);
