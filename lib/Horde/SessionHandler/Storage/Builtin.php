@@ -1,10 +1,11 @@
 <?php
+
 /**
  * SessionHandler storage implementation for PHP's built-in session handler.
  * This doesn't do any session handling itself - instead, it exists to allow
  * utility features to be used with the built-in PHP handler.
  *
- * Copyright 2005-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2005-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -25,7 +26,7 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
 
     /**
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -37,15 +38,11 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
 
     /**
      */
-    public function open($save_path = null, $session_name = null)
-    {
-    }
+    public function open($save_path = null, $session_name = null) {}
 
-     /**
-      */
-    public function close()
-    {
-    }
+    /**
+     */
+    public function close() {}
 
     /**
      */
@@ -73,8 +70,8 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
 
         foreach ($di as $val) {
             /* Make sure we're dealing with files that start with sess_. */
-            if ($val->isFile() &&
-                ($val->getFilename() == 'sess_' . $id)) {
+            if ($val->isFile()
+                && ($val->getFilename() == 'sess_' . $id)) {
                 return unlink($val->getPathname());
             }
         }
@@ -93,7 +90,7 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
      */
     public function getSessionIDs()
     {
-        $sessions = array();
+        $sessions = [];
 
         try {
             $di = new DirectoryIterator($this->_path);
@@ -103,8 +100,8 @@ class Horde_SessionHandler_Storage_Builtin extends Horde_SessionHandler_Storage
 
         foreach ($di as $val) {
             /* Make sure we're dealing with files that start with sess_. */
-            if ($val->isFile() &&
-                (strpos($val->getFilename(), 'sess_') === 0)) {
+            if ($val->isFile()
+                && (strpos($val->getFilename(), 'sess_') === 0)) {
                 $sessions[] = substr($val->getFilename(), strlen('sess_'));
             }
         }

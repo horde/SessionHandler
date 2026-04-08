@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -53,7 +54,7 @@ class Horde_SessionHandler_Storage_Hashtable extends Horde_SessionHandler_Storag
      *   - track: (boolean) Track active sessions?
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (empty($params['hashtable'])) {
             throw new InvalidArgumentException('Missing hashtable parameter.');
@@ -69,15 +70,13 @@ class Horde_SessionHandler_Storage_Hashtable extends Horde_SessionHandler_Storag
         parent::__construct($params);
 
         if (!empty($this->_params['track']) && (!rand(0, 999))) {
-            register_shutdown_function(array($this, 'trackGC'));
+            register_shutdown_function([$this, 'trackGC']);
         }
     }
 
     /**
      */
-    public function open($save_path = null, $session_name = null)
-    {
-    }
+    public function open($save_path = null, $session_name = null) {}
 
     /**
      */
@@ -113,17 +112,17 @@ class Horde_SessionHandler_Storage_Hashtable extends Horde_SessionHandler_Storag
      */
     public function write($id, $session_data)
     {
-        $base = array_filter(array(
-            'timeout' => ini_get('session.gc_maxlifetime')
-        ));
+        $base = array_filter([
+            'timeout' => ini_get('session.gc_maxlifetime'),
+        ]);
 
         if (!empty($this->_params['track'])) {
             // Do a replace - the only time it should fail is if we are
             // writing a session for the first time.  If that is the case,
             // update the session tracker.
-            $res = $this->_hash->set($id, $session_data, array_merge($base, array(
+            $res = $this->_hash->set($id, $session_data, array_merge($base, [
                 'replace' => true,
-            )));
+            ]));
             $track = !$res;
         } else {
             $res = $track = false;
@@ -222,9 +221,9 @@ class Horde_SessionHandler_Storage_Hashtable extends Horde_SessionHandler_Storag
      */
     protected function _getTrackIds()
     {
-        if ((($ids = $this->_hash->get($this->_trackID)) === false) ||
-            !($ids = json_decode($ids, true))) {
-            $ids = array();
+        if ((($ids = $this->_hash->get($this->_trackID)) === false)
+            || !($ids = json_decode($ids, true))) {
+            $ids = [];
         }
 
         return $ids;

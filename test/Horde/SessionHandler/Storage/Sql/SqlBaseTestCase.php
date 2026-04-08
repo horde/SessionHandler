@@ -1,22 +1,26 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage\Sql;
+
 use Horde\SessionHandler\Storage\BaseTestCase;
-use \Horde_Log_Logger;
-use \Horde_Log_Handler_Cli;
-use \Horde_Db_Migration_Migrator;
-use \Horde_SessionHandler_Storage_Sql;
+use Horde_Log_Logger;
+use Horde_Log_Handler_Cli;
+use Horde_Db_Migration_Migrator;
+use Horde_SessionHandler_Storage_Sql;
 
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class SqlBaseTestCase extends BaseTestCase
 {
@@ -88,11 +92,12 @@ class SqlBaseTestCase extends BaseTestCase
         self::$migrator = new Horde_Db_Migration_Migrator(
             self::$db,
             null,//$logger,
-            array('migrationsPath' => $dir,
-                  'schemaTableName' => 'horde_sh_schema_info'));
+            ['migrationsPath' => $dir,
+                'schemaTableName' => 'horde_sh_schema_info']
+        );
         self::$migrator->up();
 
-        self::$handler = new Horde_SessionHandler_Storage_Sql(array('db' => self::$db));
+        self::$handler = new Horde_SessionHandler_Storage_Sql(['db' => self::$db]);
     }
 
     public static function tearDownAfterClass(): void

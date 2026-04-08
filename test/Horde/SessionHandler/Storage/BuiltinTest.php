@@ -1,18 +1,22 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage;
-use \Horde_SessionHandler_Storage_Builtin;
+
+use Horde_SessionHandler_Storage_Builtin;
 
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class BuiltinTest extends BaseTestCase
 {
@@ -61,13 +65,13 @@ class BuiltinTest extends BaseTestCase
         /* List while session is active. */
         $ids = self::$handler->getSessionIDs();
         sort($ids);
-        $this->assertEquals(array('sessionid', 'sessionid2'), $ids);
+        $this->assertEquals(['sessionid', 'sessionid2'], $ids);
         session_write_close();
 
         /* List while session is inactive. */
         $ids = self::$handler->getSessionIDs();
         sort($ids);
-        $this->assertEquals(array('sessionid', 'sessionid2'), $ids);
+        $this->assertEquals(['sessionid', 'sessionid2'], $ids);
     }
 
     /**
@@ -81,11 +85,15 @@ class BuiltinTest extends BaseTestCase
         session_start();
         $sessionIds = self::$handler->getSessionIDs();
         sort($sessionIds);
-        $this->assertEquals(array('sessionid', 'sessionid2'),
-                            $sessionIds);
+        $this->assertEquals(
+            ['sessionid', 'sessionid2'],
+            $sessionIds
+        );
         session_destroy();
-        $this->assertEquals(array('sessionid'),
-                            self::$handler->getSessionIDs());
+        $this->assertEquals(
+            ['sessionid'],
+            self::$handler->getSessionIDs()
+        );
     }
 
     /**
@@ -102,8 +110,10 @@ class BuiltinTest extends BaseTestCase
         ini_set('session.gc_maxlifetime', -1);
         session_name('sessionname');
         session_start();
-        $this->assertEquals(array(),
-                            self::$handler->getSessionIDs());
+        $this->assertEquals(
+            [],
+            self::$handler->getSessionIDs()
+        );
     }
 
     protected function _write()
@@ -124,7 +134,7 @@ class BuiltinTest extends BaseTestCase
             ini_set('session.use_cookies', 0);
             ini_set('session.save_path', self::$dir);
         }
-        self::$handler = new Horde_SessionHandler_Storage_Builtin(array('path' => self::$dir));
+        self::$handler = new Horde_SessionHandler_Storage_Builtin(['path' => self::$dir]);
     }
 
     public function tearDown(): void
@@ -143,10 +153,10 @@ class BuiltinTest extends BaseTestCase
     {
         parent::tearDownAfterClass();
         unset($_SESSION);
-        if ((function_exists('session_status') &&
-             session_status() == PHP_SESSION_ACTIVE) ||
-            (!function_exists('session_status') &&
-             session_id())) {
+        if ((function_exists('session_status')
+             && session_status() == PHP_SESSION_ACTIVE)
+            || (!function_exists('session_status')
+             && session_id())) {
             session_destroy();
         }
         if (!headers_sent()) {

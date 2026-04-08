@@ -1,20 +1,24 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage;
-use \Horde_SessionHandler_Storage_File;
-use \Horde_Util;
-use \Horde_SessionHandler_Storage_Stack;
+
+use Horde_SessionHandler_Storage_File;
+use Horde_Util;
+use Horde_SessionHandler_Storage_Stack;
 
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class StackTest extends BaseTestCase
 {
@@ -69,19 +73,19 @@ class StackTest extends BaseTestCase
     {
         parent::setUpBeforeClass();
 
-        $storage1 = new Horde_SessionHandler_Storage_File(array(
-            'path' => self::$dir
-        ));
-        $storage2 = new Horde_SessionHandler_Storage_File(array(
-            'path' => Horde_Util::createTempDir()
-        ));
+        $storage1 = new Horde_SessionHandler_Storage_File([
+            'path' => self::$dir,
+        ]);
+        $storage2 = new Horde_SessionHandler_Storage_File([
+            'path' => Horde_Util::createTempDir(),
+        ]);
 
-        self::$handler = new Horde_SessionHandler_Storage_Stack(array(
-            'stack' => array(
+        self::$handler = new Horde_SessionHandler_Storage_Stack([
+            'stack' => [
                 $storage1,
-                $storage2
-            )
-        ));
+                $storage2,
+            ],
+        ]);
     }
 
     public function setUp(): void

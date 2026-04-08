@@ -1,4 +1,5 @@
 <?php
+
 class HordeSessionHandlerFixBlobLength extends Horde_Db_Migration_Base
 {
     public function up()
@@ -6,7 +7,5 @@ class HordeSessionHandlerFixBlobLength extends Horde_Db_Migration_Base
         $this->changeColumn('horde_sessionhandler', 'session_data', 'binary');
     }
 
-    public function down()
-    {
-    }
+    public function down() {}
 }

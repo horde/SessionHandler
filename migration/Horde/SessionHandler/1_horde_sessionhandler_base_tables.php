@@ -1,16 +1,17 @@
 <?php
+
 class HordeSessionhandlerBaseTables extends Horde_Db_Migration_Base
 {
     public function up()
     {
         if (!in_array('horde_sessionhandler', $this->tables())) {
-            $t = $this->createTable('horde_sessionhandler', array('autoincrementKey' => false));
-            $t->column('session_id', 'string', array('limit' => 32, 'null' => false));
-            $t->column('session_lastmodified', 'integer', array('null' => false));
+            $t = $this->createTable('horde_sessionhandler', ['autoincrementKey' => false]);
+            $t->column('session_id', 'string', ['limit' => 32, 'null' => false]);
+            $t->column('session_lastmodified', 'integer', ['null' => false]);
             $t->column('session_data', 'binary');
-            $t->primaryKey(array('session_id'));
+            $t->primaryKey(['session_id']);
             $t->end();
-            $this->addIndex('horde_sessionhandler', array('session_lastmodified'));
+            $this->addIndex('horde_sessionhandler', ['session_lastmodified']);
         }
     }
 

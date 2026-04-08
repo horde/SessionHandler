@@ -1,17 +1,20 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage;
 
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class MemcacheTest extends BaseTestCase
 {
@@ -60,8 +63,10 @@ class MemcacheTest extends BaseTestCase
             self::$reason = 'No memcache extension.';
             return;
         }
-        $config = self::getConfig('SESSIONHANDLER_MEMCACHE_TEST_CONFIG',
-                                  dirname(__FILE__) . '/..');
+        $config = self::getConfig(
+            'SESSIONHANDLER_MEMCACHE_TEST_CONFIG',
+            dirname(__FILE__) . '/..'
+        );
         if (!$config || empty($config['sessionhandler']['memcache'])) {
             self::$reason = 'No memcache configuration.';
             return;
@@ -70,7 +75,8 @@ class MemcacheTest extends BaseTestCase
         $memcache->delete('sessionid');
         $memcache->delete('sessionid2');
         self::$handler = new Horde_SessionHandler_Storage_Memcache(
-            array('memcache' => $memcache, 'track' => true));
+            ['memcache' => $memcache, 'track' => true]
+        );
         parent::setUpBeforeClass();
     }
 

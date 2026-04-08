@@ -1,8 +1,9 @@
 <?php
+
 /**
  * This class provides the interface to the session storage backend.
  *
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -61,7 +62,7 @@ class Horde_SessionHandler implements SessionHandlerInterface
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Initial session data signature.
@@ -99,14 +100,14 @@ class Horde_SessionHandler implements SessionHandlerInterface
      *            DEFAULT: No
      * </pre>
      */
-    public function __construct(Horde_SessionHandler_Storage $storage,
-                                array $params = array())
-    {
+    public function __construct(
+        Horde_SessionHandler_Storage $storage,
+        array $params = []
+    ) {
         $params = array_merge($this->_params, $params);
 
-        $this->_logger = isset($params['logger'])
-            ? $params['logger']
-            : new Horde_Support_Stub();
+        $this->_logger = $params['logger']
+            ?? new Horde_Support_Stub();
         unset($params['logger']);
 
         $this->_params = $params;
@@ -205,9 +206,9 @@ class Horde_SessionHandler implements SessionHandlerInterface
      */
     public function write($id, $session_data): bool
     {
-        if ($this->changed ||
-            (empty($this->_params['no_md5']) &&
-             ($this->_sig != md5($session_data)))) {
+        if ($this->changed
+            || (empty($this->_params['no_md5'])
+             && ($this->_sig != md5($session_data)))) {
             if (!$this->_storage->write($id, $session_data)) {
                 $this->_logger->log('Failed to write session data (' . $id . ')', 'DEBUG');
                 return false;
@@ -273,10 +274,10 @@ class Horde_SessionHandler implements SessionHandlerInterface
      */
     public function getSessionsInfo()
     {
-        $info = array();
+        $info = [];
 
-        if (empty($this->_params['parse']) ||
-            !is_callable($this->_params['parse'])) {
+        if (empty($this->_params['parse'])
+            || !is_callable($this->_params['parse'])) {
             return $info;
         }
 

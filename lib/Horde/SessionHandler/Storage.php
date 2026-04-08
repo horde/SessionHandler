@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -36,14 +37,14 @@ abstract class Horde_SessionHandler_Storage
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Constructor.
      *
      * @param array $params  Configuration parameters.
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->_params = array_merge($this->_params, $params);
     }
@@ -61,9 +62,7 @@ abstract class Horde_SessionHandler_Storage
      *
      * @deprecated
      */
-    public function setLogger(Horde_Log_Logger $log)
-    {
-    }
+    public function setLogger(Horde_Log_Logger $log) {}
 
     /**
      * Open the backend.

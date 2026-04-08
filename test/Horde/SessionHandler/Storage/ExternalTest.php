@@ -1,19 +1,23 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage;
-use \Horde_SessionHandler_Storage_File;
-use \Horde_SessionHandler_Storage_External;
+
+use Horde_SessionHandler_Storage_File;
+use Horde_SessionHandler_Storage_External;
 
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class ExternalTest extends BaseTestCase
 {
@@ -86,13 +90,14 @@ class ExternalTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        $external = new Horde_SessionHandler_Storage_File(array('path' => self::$dir));
+        $external = new Horde_SessionHandler_Storage_File(['path' => self::$dir]);
         self::$handler = new Horde_SessionHandler_Storage_External(
-            array('open' => array($external, 'open'),
-                  'close' => array($external, 'close'),
-                  'read' => array($external, 'read'),
-                  'write' => array($external, 'write'),
-                  'destroy' => array($external, 'destroy'),
-                  'gc' => array($external, 'gc')));
+            ['open' => [$external, 'open'],
+                'close' => [$external, 'close'],
+                'read' => [$external, 'read'],
+                'write' => [$external, 'write'],
+                'destroy' => [$external, 'destroy'],
+                'gc' => [$external, 'gc']]
+        );
     }
 }

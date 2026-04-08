@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -23,7 +24,7 @@
 class Horde_SessionHandler_Storage_File extends Horde_SessionHandler_Storage
 {
     /* File prefix. */
-    const PREFIX = 'horde_sh_';
+    public const PREFIX = 'horde_sh_';
 
     /**
      * File stream.
@@ -42,7 +43,7 @@ class Horde_SessionHandler_Storage_File extends Horde_SessionHandler_Storage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['path'])) {
             throw new InvalidArgumentException('Missing path parameter.');
@@ -152,9 +153,9 @@ class Horde_SessionHandler_Storage_File extends Horde_SessionHandler_Storage
         $expire_time = time() - $maxlifetime;
 
         foreach ($di as $val) {
-            if ($val->isFile() &&
-                (strpos($val->getFilename(), self::PREFIX) === 0) &&
-                ($val->getMTime() < $expire_time)) {
+            if ($val->isFile()
+                && (strpos($val->getFilename(), self::PREFIX) === 0)
+                && ($val->getMTime() < $expire_time)) {
                 @unlink($val->getPathname());
             }
         }
@@ -166,17 +167,18 @@ class Horde_SessionHandler_Storage_File extends Horde_SessionHandler_Storage
      */
     public function getSessionIDs()
     {
-        $ids = array();
+        $ids = [];
 
         try {
             $di = new DirectoryIterator($this->_params['path']);
             foreach ($di as $val) {
-                if ($val->isFile() &&
-                    (strpos($val->getFilename(), self::PREFIX) === 0)) {
+                if ($val->isFile()
+                    && (strpos($val->getFilename(), self::PREFIX) === 0)) {
                     $ids[] = substr($val->getFilename(), strlen(self::PREFIX));
                 }
             }
-        } catch (UnexpectedValueException $e) {}
+        } catch (UnexpectedValueException $e) {
+        }
 
         return $ids;
     }

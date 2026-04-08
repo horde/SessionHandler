@@ -1,17 +1,20 @@
 <?php
+
 /**
  * Prepare the test setup.
  */
+
 namespace Horde\SessionHandler\Storage\Sql;
 
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * @author     Jan Schneider <jan@horde.org>
  * @category   Horde
  * @package    SessionHandler
  * @subpackage UnitTests
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ * @coversNothing
  */
 class Oci8Test extends SqlBaseTestCase
 {
@@ -21,8 +24,10 @@ class Oci8Test extends SqlBaseTestCase
             self::$reason = 'No oci8 extension';
             return;
         }
-        $config = self::getConfig('SESSIONHANDLER_SQL_OCI8_TEST_CONFIG',
-                                  dirname(__FILE__) . '/../..');
+        $config = self::getConfig(
+            'SESSIONHANDLER_SQL_OCI8_TEST_CONFIG',
+            dirname(__FILE__) . '/../..'
+        );
         if (!$config || empty($config['sessionhandler']['sql']['oci8'])) {
             self::$reason = 'No oci8 configuration';
             return;
