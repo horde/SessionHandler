@@ -1,11 +1,12 @@
 <?php
+
 /**
  * SessionHandler storage implementation that will loop through a list of
  * storage drivers to handle the session information.
  * This driver allows for use of caching backends on top of persistent
  * backends, for example.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,7 +23,7 @@ class Horde_SessionHandler_Storage_Stack extends Horde_SessionHandler_Storage
      *
      * @var array
      */
-    protected $_stack = array();
+    protected $_stack = [];
 
     /**
      * Constructor.
@@ -36,7 +37,7 @@ class Horde_SessionHandler_Storage_Stack extends Horde_SessionHandler_Storage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['stack'])) {
             throw new InvalidArgumentException('Missing stack parameter.');

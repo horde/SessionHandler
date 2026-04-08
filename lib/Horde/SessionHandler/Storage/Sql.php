@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SessionHandler storage implementation for SQL databases.
  *
@@ -17,7 +18,7 @@
  * CREATE INDEX session_lastmodified_idx ON horde_sessionhandler (session_lastmodified);
  * </pre>
  *
- * Copyright 2002-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2002-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -48,7 +49,7 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['db'])) {
             throw new InvalidArgumentException('Missing db parameter.');
@@ -56,9 +57,9 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
         $this->_db = $params['db'];
         unset($params['db']);
 
-        parent::__construct(array_merge(array(
-            'table' => 'horde_sessionhandler'
-        ), $params));
+        parent::__construct(array_merge([
+            'table' => 'horde_sessionhandler',
+        ], $params));
     }
 
     /**
@@ -94,15 +95,18 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
         }
 
         /* Build query. */
-        $query = sprintf('SELECT session_data FROM %s WHERE session_id = ?',
-                         $this->_params['table']);
-        $values = array($id);
+        $query = sprintf(
+            'SELECT session_data FROM %s WHERE session_id = ?',
+            $this->_params['table']
+        );
+        $values = [$id];
 
         /* Execute the query. */
         try {
             $columns = $this->_db->columns($this->_params['table']);
             return $columns['session_data']->binaryToString(
-                $this->_db->selectValue($query, $values));
+                $this->_db->selectValue($query, $values)
+            );
         } catch (Horde_Db_Exception $e) {
             return '';
         }
@@ -120,29 +124,32 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
         /* Check if session exists. */
         try {
             $exists = $this->_db->selectValue(
-                sprintf('SELECT 1 FROM %s WHERE session_id = ?',
-                        $this->_params['table']),
-                array($id));
+                sprintf(
+                    'SELECT 1 FROM %s WHERE session_id = ?',
+                    $this->_params['table']
+                ),
+                [$id]
+            );
         } catch (Horde_Db_Exception $e) {
             return false;
         }
 
         /* Update or insert session data. */
-        $values = array(
+        $values = [
             'session_data' => new Horde_Db_Value_Binary($session_data),
-            'session_lastmodified' => time()
-        );
+            'session_lastmodified' => time(),
+        ];
         try {
             if ($exists) {
                 $this->_db->updateBlob(
                     $this->_params['table'],
                     $values,
-                    array('session_id = ?', array($id))
+                    ['session_id = ?', [$id]]
                 );
             } else {
                 $this->_db->insertBlob(
                     $this->_params['table'],
-                    array_merge(array('session_id' => $id), $values),
+                    array_merge(['session_id' => $id], $values),
                     null,
                     $id
                 );
@@ -164,9 +171,11 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
     public function destroy($id)
     {
         /* Build the SQL query. */
-        $query = sprintf('DELETE FROM %s WHERE session_id = ?',
-                         $this->_params['table']);
-        $values = array($id);
+        $query = sprintf(
+            'DELETE FROM %s WHERE session_id = ?',
+            $this->_params['table']
+        );
+        $values = [$id];
 
         /* Execute the query. */
         try {
@@ -184,9 +193,11 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
     public function gc($maxlifetime = 300)
     {
         /* Build the SQL query. */
-        $query = sprintf('DELETE FROM %s WHERE session_lastmodified < ?',
-                         $this->_params['table']);
-        $values = array(time() - $maxlifetime);
+        $query = sprintf(
+            'DELETE FROM %s WHERE session_lastmodified < ?',
+            $this->_params['table']
+        );
+        $values = [time() - $maxlifetime];
 
         /* Execute the query. */
         try {
@@ -205,16 +216,18 @@ class Horde_SessionHandler_Storage_Sql extends Horde_SessionHandler_Storage
         $this->open();
 
         /* Build the SQL query. */
-        $query = sprintf('SELECT session_id FROM %s' .
-                         ' WHERE session_lastmodified >= ?',
-                         $this->_params['table']);
-        $values = array(time() - ini_get('session.gc_maxlifetime'));
+        $query = sprintf(
+            'SELECT session_id FROM %s'
+                         . ' WHERE session_lastmodified >= ?',
+            $this->_params['table']
+        );
+        $values = [time() - ini_get('session.gc_maxlifetime')];
 
         /* Execute the query. */
         try {
             return $this->_db->selectValues($query, $values);
         } catch (Horde_Db_Exception $e) {
-            return array();
+            return [];
         }
     }
 }

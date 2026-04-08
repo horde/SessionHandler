@@ -1,9 +1,10 @@
 <?php
+
 /**
  * SessionHandler storage implementation for an external save handler defined
  * via configuration parameters.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -30,9 +31,9 @@ class Horde_SessionHandler_Storage_External extends Horde_SessionHandler_Storage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
-        foreach (array('open', 'close', 'read', 'write', 'destroy', 'gc') as $val) {
+        foreach (['open', 'close', 'read', 'write', 'destroy', 'gc'] as $val) {
             if (!isset($params[$val])) {
                 throw new InvalidArgumentException('Missing parameter: ' . $val);
             }

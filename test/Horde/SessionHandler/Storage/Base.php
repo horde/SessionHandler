@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Jan Schneider <jan@horde.org>
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
@@ -6,9 +7,14 @@
  * @package    Horde_SessionHandler
  * @subpackage UnitTests
  */
-namespace Horde\SessionHandler\Storage;
-use \Horde_Test_Case as TestCase;
 
+namespace Horde\SessionHandler\Storage;
+
+use Horde_Test_Case as TestCase;
+
+/**
+ * @coversNothing
+ */
 class BaseTestCase extends TestCase
 {
     protected static $handler;
@@ -43,14 +49,14 @@ class BaseTestCase extends TestCase
         /* List while session is active. */
         $ids = self::$handler->getSessionIDs();
         sort($ids);
-        $this->assertEquals(array('sessionid', 'sessionid2'), $ids);
+        $this->assertEquals(['sessionid', 'sessionid2'], $ids);
         $this->assertTrue(self::$handler->close());
 
         /* List while session is inactive. */
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         $ids = self::$handler->getSessionIDs();
         sort($ids);
-        $this->assertEquals(array('sessionid', 'sessionid2'), $ids);
+        $this->assertEquals(['sessionid', 'sessionid2'], $ids);
         $this->assertTrue(self::$handler->close());
     }
 
@@ -59,16 +65,20 @@ class BaseTestCase extends TestCase
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         self::$handler->read('sessionid2');
         $this->assertTrue(self::$handler->destroy('sessionid2'));
-        $this->assertEquals(array('sessionid'),
-                            self::$handler->getSessionIDs());
+        $this->assertEquals(
+            ['sessionid'],
+            self::$handler->getSessionIDs()
+        );
     }
 
     protected function _gc()
     {
         $this->assertTrue(self::$handler->open(self::$dir, 'sessionname'));
         $this->assertTrue(self::$handler->gc(-1));
-        $this->assertEquals(array(),
-                            self::$handler->getSessionIDs());
+        $this->assertEquals(
+            [],
+            self::$handler->getSessionIDs()
+        );
     }
 
     public static function setUpBeforeClass(): void

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2005-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2005-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -58,7 +59,7 @@ class Horde_SessionHandler_Storage_Memcache extends Horde_SessionHandler_Storage
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (empty($params['memcache'])) {
             throw new InvalidArgumentException('Missing memcache argument.');
@@ -73,9 +74,9 @@ class Horde_SessionHandler_Storage_Memcache extends Horde_SessionHandler_Storage
             $this->_params['track_lifetime'] = ini_get('session.gc_maxlifetime');
         }
 
-        if (!empty($this->_params['track']) &&
-            (substr(time(), -3) === '000')) {
-            register_shutdown_function(array($this, 'trackGC'));
+        if (!empty($this->_params['track'])
+            && (substr(time(), -3) === '000')) {
+            register_shutdown_function([$this, 'trackGC']);
         }
     }
 
@@ -132,8 +133,8 @@ class Horde_SessionHandler_Storage_Memcache extends Horde_SessionHandler_Storage
             $res = $track = false;
         }
 
-        if (!$res &&
-            !$this->_memcache->set($id, $session_data)) {
+        if (!$res
+            && !$this->_memcache->set($id, $session_data)) {
             return false;
         }
 
@@ -141,7 +142,7 @@ class Horde_SessionHandler_Storage_Memcache extends Horde_SessionHandler_Storage
             $this->_memcache->lock($this->_trackID);
             $ids = $this->_memcache->get($this->_trackID);
             if ($ids === false) {
-                $ids = array();
+                $ids = [];
             }
 
             $ids[$id] = time();
@@ -197,7 +198,7 @@ class Horde_SessionHandler_Storage_Memcache extends Horde_SessionHandler_Storage
         $ids = $this->_memcache->get($this->_trackID);
 
         return ($ids === false)
-            ? array()
+            ? []
             : array_keys($ids);
     }
 

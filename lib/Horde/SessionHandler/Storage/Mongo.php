@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -23,10 +24,10 @@
 class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage implements Horde_Mongo_Collection_Index
 {
     /* Field names. */
-    const DATA = 'data';
-    const LOCK = 'lock';
-    const MODIFIED = 'ts';
-    const SID = 'sid';
+    public const DATA = 'data';
+    public const LOCK = 'lock';
+    public const MODIFIED = 'ts';
+    public const SID = 'sid';
 
     /**
      * MongoCollection object for the storage table.
@@ -47,11 +48,11 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
      *
      * @var array
      */
-    protected $_indices = array(
-        'index_ts' => array(
-            self::MODIFIED => 1
-        )
-    );
+    protected $_indices = [
+        'index_ts' => [
+            self::MODIFIED => 1,
+        ],
+    ];
 
     /**
      * Constructor.
@@ -62,15 +63,15 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
      * mongo_db: (Horde_Mongo_Client) [REQUIRED] The Mongo client object.
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['mongo_db'])) {
             throw new InvalidArgumentException('Missing mongo_db parameter.');
         }
 
-        parent::__construct(array_merge(array(
-            'collection' => 'horde_sessionhandler'
-        ), $params));
+        parent::__construct(array_merge([
+            'collection' => 'horde_sessionhandler',
+        ], $params));
 
         $this->_db = $this->_params['mongo_db']->selectCollection(null, $this->_params['collection']);
     }
@@ -89,10 +90,11 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
         if ($this->_locked) {
             try {
                 $this->_db->update(
-                    array(self::SID => $this->_locked),
-                    array('$unset' => array(self::LOCK => ''))
+                    [self::SID => $this->_locked],
+                    ['$unset' => [self::LOCK => '']]
                 );
-            } catch (MongoException $e) {}
+            } catch (MongoException $e) {
+            }
             $this->_locked = false;
         }
 
@@ -107,7 +109,7 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
          * we need findAndModify() for its atomicity for locking, but this
          * atomicity means we can't tell the difference between a
          * non-existent session and a locked session. */
-        $exists = $this->_db->count(array(self::SID => $id));
+        $exists = $this->_db->count([self::SID => $id]);
 
         $exist_check = false;
         $i = 0;
@@ -116,10 +118,10 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
         $max = ini_get('max_execution_time') * 10;
 
         while (true) {
-            $data = array(
+            $data = [
                 self::LOCK => time(),
-                self::SID => $id
-            );
+                self::SID => $id,
+            ];
 
             /* This call will either create the session if it doesn't exist,
              * or will update the current session and lock it if not already
@@ -127,15 +129,15 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
              * an empty set and we need to sleep and wait for lock to be
              * removed. */
             $res = $this->_db->findAndModify(
-                array(
+                [
                     self::SID => $id,
-                    self::LOCK => array('$exists' => $exist_check)
-                ),
-                array('$set' => $data),
-                array(self::DATA => true),
-                array(
-                    'upsert' => !$exists
-                )
+                    self::LOCK => ['$exists' => $exist_check],
+                ],
+                ['$set' => $data],
+                [self::DATA => true],
+                [
+                    'upsert' => !$exists,
+                ]
             );
 
             if (!$exists || isset($res[self::DATA])) {
@@ -147,8 +149,8 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
              * process. */
             if ($i == 10) {
                 $res = $this->_db->findOne(
-                    array(self::SID => $id),
-                    array(self::LOCK => true)
+                    [self::SID => $id],
+                    [self::LOCK => true]
                 );
 
                 $max = isset($res[self::LOCK])
@@ -177,15 +179,15 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
     {
         /* Update/insert session data. */
         try {
-            $this->_db->update(array(
-                self::SID => $id
-            ), array(
+            $this->_db->update([
+                self::SID => $id,
+            ], [
                 self::DATA => new MongoBinData($session_data, MongoBinData::BYTE_ARRAY),
                 self::MODIFIED => time(),
-                self::SID => $id
-            ), array(
-                'upsert' => true
-            ));
+                self::SID => $id,
+            ], [
+                'upsert' => true,
+            ]);
 
             $this->_locked = false;
         } catch (MongoException $e) {
@@ -200,11 +202,12 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
     public function destroy($id)
     {
         try {
-            $this->_db->remove(array(
-                self::SID => $id
-            ));
+            $this->_db->remove([
+                self::SID => $id,
+            ]);
             return true;
-        } catch (MongoException $e) {}
+        } catch (MongoException $e) {
+        }
 
         return false;
     }
@@ -214,13 +217,14 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
     public function gc($maxlifetime = 300)
     {
         try {
-            $this->_db->remove(array(
-                self::MODIFIED => array(
-                    '$lt' => (time() - $maxlifetime)
-                )
-            ));
+            $this->_db->remove([
+                self::MODIFIED => [
+                    '$lt' => (time() - $maxlifetime),
+                ],
+            ]);
             return true;
-        } catch (MongoException $e) {}
+        } catch (MongoException $e) {
+        }
 
         return false;
     }
@@ -229,19 +233,20 @@ class Horde_SessionHandler_Storage_Mongo extends Horde_SessionHandler_Storage im
      */
     public function getSessionIDs()
     {
-        $ids = array();
+        $ids = [];
 
         try {
-            $cursor = $this->_db->find(array(
-                self::MODIFIED => array(
-                    '$gte' => (time() - ini_get('session.gc_maxlifetime'))
-                )
-            ), array(self::SID => true));
+            $cursor = $this->_db->find([
+                self::MODIFIED => [
+                    '$gte' => (time() - ini_get('session.gc_maxlifetime')),
+                ],
+            ], [self::SID => true]);
 
             foreach ($cursor as $val) {
                 $ids[] = $val[self::SID];
             }
-        } catch (MongoException $e) {}
+        } catch (MongoException $e) {
+        }
 
         return $ids;
     }
