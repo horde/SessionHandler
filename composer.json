@@ -22,9 +22,10 @@
         }
     ],
     "keywords": [
-        "sessions"
+        "sessions",
+        "sessionless_sessions"
     ],
-    "time": "2026-04-08",
+    "time": "2026-04-15",
     "repositories": [],
     "require": {
         "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
@@ -42,11 +43,14 @@
         "horde/db": "^3 || dev-FRAMEWORK_6_0",
         "horde/hashtable": "^2 || dev-FRAMEWORK_6_0",
         "horde/log": "^3 || dev-FRAMEWORK_6_0",
-        "horde/mongo": "^2 || dev-FRAMEWORK_6_0"
+        "horbde/mongo": "^2"
     },
     "autoload": {
         "psr-0": {
             "Horde_SessionHandler": "lib/"
+        },
+        "psr-4": {
+            "Horde\\SessionHandler\\": "src/"
         }
     },
     "autoload-dev": {
