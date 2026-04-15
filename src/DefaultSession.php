@@ -16,16 +16,16 @@ namespace Horde\SessionHandler;
 /**
  * Default in-memory implementation of the Session interface.
  */
-final class DefaultSession implements Session
+class DefaultSession implements Session
 {
-    private bool $dirty = false;
+    protected bool $dirty = false;
 
     /**
      * @param array<string, mixed> $data
      */
     public function __construct(
         private readonly SessionId $id,
-        private array $data = [],
+        protected array $data = [],
     ) {}
 
     public function getId(): SessionId

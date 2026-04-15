@@ -16,7 +16,7 @@ namespace Horde\SessionHandler;
 /**
  * Stateless factory that creates DefaultSession instances.
  */
-final class DefaultSessionFactory implements SessionFactory
+class DefaultSessionFactory implements SessionFactory
 {
     public function createNew(SessionId $id): Session
     {
