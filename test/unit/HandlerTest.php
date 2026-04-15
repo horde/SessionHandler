@@ -23,6 +23,7 @@ use Horde_SessionHandler_Storage_File;
 use Horde_Util;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Horde\Util\Util;
 
 #[CoversClass(Horde_SessionHandler::class)]
 class HandlerTest extends TestCase
@@ -31,7 +32,7 @@ class HandlerTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$dir = Horde_Util::createTempDir();
+        self::$dir = Util::createTempDir();
     }
 
     private function createHandler(
@@ -257,7 +258,7 @@ class HandlerTest extends TestCase
 
     public function testGetSessionsInfoSkipsUnparsableSessions(): void
     {
-        $dir = Horde_Util::createTempDir();
+        $dir = Util::createTempDir();
         $storage = new Horde_SessionHandler_Storage_File(['path' => $dir]);
         $handler = new Horde_SessionHandler($storage, [
             'noset' => true,

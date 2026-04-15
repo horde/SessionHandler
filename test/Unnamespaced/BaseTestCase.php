@@ -20,6 +20,7 @@ namespace Horde\SessionHandler\Test\Unnamespaced;
 use Horde_SessionHandler_Storage;
 use Horde_Util;
 use PHPUnit\Framework\TestCase;
+use Horde\Util\Util;
 
 abstract class BaseTestCase extends TestCase
 {
@@ -116,7 +117,7 @@ abstract class BaseTestCase extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$dir = Horde_Util::createTempDir();
+        self::$dir = Util::createTempDir();
     }
 
     public static function tearDownAfterClass(): void

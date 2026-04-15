@@ -23,6 +23,7 @@ use Horde_SessionHandler_Storage_Stack;
 use Horde_Util;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Depends;
+use Horde\Util\Util;
 
 #[CoversClass(Horde_SessionHandler_Storage_Stack::class)]
 class StackTest extends BaseTestCase
@@ -70,7 +71,7 @@ class StackTest extends BaseTestCase
             'path' => self::$dir,
         ]);
         $storage2 = new Horde_SessionHandler_Storage_File([
-            'path' => Horde_Util::createTempDir(),
+            'path' => Util::createTempDir(),
         ]);
 
         self::$handler = new Horde_SessionHandler_Storage_Stack([

@@ -22,6 +22,7 @@ use Horde_Util;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
+use Horde\Util\Util;
 
 #[CoversClass(Horde_SessionHandler_Storage_Builtin::class)]
 class BuiltinTest extends TestCase
@@ -122,7 +123,7 @@ class BuiltinTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$dir = Horde_Util::createTempDir();
+        self::$dir = Util::createTempDir();
         if (!headers_sent()) {
             session_cache_limiter('');
             ini_set('session.use_cookies', '0');
