@@ -33,6 +33,11 @@ use Horde\SessionHandler\SessionStorageBackend;
  * Sessions are stored as opaque blobs with a TTL derived from the
  * expiration timestamp. An optional tracking set allows enumeration
  * of active sessions.
+ *
+ * @deprecated Use {@see ModernHashtableBackend}, which depends on the PSR-4
+ *             Horde\HashTable\LockableHashTable interface instead of the
+ *             legacy Horde_HashTable_Base & Horde_HashTable_Lock intersection.
+ *             The modern backend supports phpredis as well as Predis.
  */
 final class HashtableBackend implements
     SessionStorageBackend,
