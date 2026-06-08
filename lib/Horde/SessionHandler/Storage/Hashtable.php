@@ -21,6 +21,10 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   SessionHandler
  * @since     2.2.0
+ *
+ * @deprecated Use {@see \Horde\SessionHandler\Storage\ModernHashtableBackend},
+ *             which depends on the PSR-4 Horde\HashTable\LockableHashTable
+ *             interface and supports phpredis as well as Predis.
  */
 class Horde_SessionHandler_Storage_Hashtable extends Horde_SessionHandler_Storage
 {
