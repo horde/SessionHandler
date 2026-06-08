@@ -26,6 +26,7 @@ use Horde\SessionHandler\Storage\HashtableBackend;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * Concrete test double that extends Horde_HashTable_Base and implements
@@ -147,7 +148,7 @@ class HashtableBackendTest extends TestCase
     {
         $hashTable = new NonLockingHashTableStub();
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         new HashtableBackend($hashTable);
     }
