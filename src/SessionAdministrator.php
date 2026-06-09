@@ -15,32 +15,43 @@ namespace Horde\SessionHandler;
 
 use Generator;
 use Horde\SessionHandler\Exception\CapabilityException;
-use Horde\SessionHandler\Exception\SessionException;
 
 /**
  * Cross-session inspection and administration service.
  *
- * Operates on stored sessions other than the one currently active in this
- * PHP process. Callers include admin tools (list active sessions, force
- * logout one), security flows (password change → invalidate all OTHER
- * sessions for the user), and ops jobs (background cleanup).
+ * Decorates {@see SessionHandler} with operations relevant to admin tools
+ * and security flows: list, load, force-destroy, look up by user, sign-out
+ * everywhere. Callers include `base/admin/sessions.php`, password-change
+ * handlers ("invalidate other sessions for this user"), and ops jobs.
  *
- * This is deliberately separate from {@see SessionHandler}, which manages
- * the lifecycle of the SINGLE active session in the current request.
+ * Design rule: code that reaches for SessionAdministrator should never
+ * also need to reach for {@see SessionHandler}. Every operation that an
+ * admin caller might need is exposed here either as a pass-through to
+ * SessionHandler (for the lifecycle ops that apply to any session by id)
+ * or as a user-aware method composed over those primitives. SessionHandler
+ * itself stays focused on the active-session lifecycle.
+ *
+ * Active-session-only operations on SessionHandler — `create()`, `save()`,
+ * `regenerate()` and the SessionHandlerInterface plumbing — are
+ * deliberately NOT proxied. They don't make sense for arbitrary stored
+ * sessions; admin tools should not be able to mint new ones, mutate
+ * others' state, or rotate IDs of foreign sessions.
  *
  * Capability requirements
  * -----------------------
- * The injected backend must implement {@see SessionStorageBackend} (mandatory)
- * for delete/load. Methods that enumerate sessions additionally require
- * {@see IterableSessionBackend}; calling them against a non-iterable backend
- * throws {@see CapabilityException}.
+ * The capability checks belong to the underlying SessionHandler — we just
+ * forward calls. listAll() throws {@see CapabilityException} when the
+ * backend is not iterable; getMetadata() throws when the backend lacks
+ * metadata support; expire() throws when the backend lacks administrative
+ * expiration support. Mandatory ops (load, destroy) work on any backend.
  *
- * Methods that filter by user (findByUser, destroyAllForUser) inspect the
- * payload of each enumerated session. The user identifier is read via the
- * "horde/auth/userId" path used by HordeSession, matching the wire layout
- * of {@see \Horde\Core\Session\HordeSession::getAuthenticatedUser()}. Other
- * Session implementations can extract via the same path or override by
- * subclassing.
+ * User-aware methods
+ * ------------------
+ * findByUser/destroyAllForUser inspect the payload of each enumerated
+ * session via the protected {@see extractUserId()} hook. The default
+ * implementation reads "horde/auth/userId" — the wire layout used by
+ * {@see \Horde\Core\Session\HordeSession::getAuthenticatedUser()}. Other
+ * Session implementations can override extractUserId() in a subclass.
  *
  * Performance note
  * ----------------
@@ -52,29 +63,19 @@ use Horde\SessionHandler\Exception\SessionException;
 class SessionAdministrator
 {
     public function __construct(
-        protected readonly SessionStorageBackend $backend,
-        protected readonly SessionFactory $factory,
-        protected readonly SessionSerializer $serializer,
+        protected readonly SessionHandler $handler,
     ) {}
 
     /**
-     * Enumerate all known session IDs in the backend.
+     * Enumerate all known session IDs.
      *
      * @return Generator<SessionId>
      *
      * @throws CapabilityException If the backend cannot enumerate sessions.
-     * @throws SessionException    On backend failure during enumeration.
      */
     public function listAll(): Generator
     {
-        if (!$this->backend instanceof IterableSessionBackend) {
-            throw new CapabilityException(
-                'Backend ' . $this->backend::class . ' does not support session enumeration; '
-                . 'implement IterableSessionBackend to enable listing.'
-            );
-        }
-
-        foreach ($this->backend->listSessions() as $id) {
+        foreach ($this->handler->listSessions() as $id) {
             yield $id;
         }
     }
@@ -82,41 +83,57 @@ class SessionAdministrator
     /**
      * Load a stored session by ID.
      *
-     * Returns null if the session does not exist, has expired, or its
-     * payload is corrupt and cannot be deserialized.
+     * Pass-through to {@see SessionHandler::load()}. Returns null if the
+     * session does not exist, has expired, or its payload is corrupt.
      */
     public function load(SessionId $id): ?Session
     {
-        $payload = $this->backend->load($id);
-        if ($payload === null) {
-            return null;
-        }
-
-        try {
-            $data = $this->serializer->deserialize($payload);
-        } catch (SessionException) {
-            return null;
-        }
-
-        return $this->factory->restore($id, $data);
+        return $this->handler->load($id);
     }
 
     /**
      * Forcibly delete a session.
      *
-     * Idempotent: removing a non-existent session is not an error.
+     * Pass-through to {@see SessionHandler::destroySession()}. Idempotent.
      */
     public function destroy(SessionId $id): void
     {
-        $this->backend->delete($id);
+        $this->handler->destroySession($id);
+    }
+
+    /**
+     * Mark a session expired without deleting it.
+     *
+     * Pass-through to {@see SessionHandler::expire()}. Useful for "soft
+     * logout" flows where a record of the session should remain for audit
+     * but the session is no longer valid for authentication.
+     *
+     * @throws CapabilityException If the backend does not support
+     *                             administrative expiration.
+     */
+    public function expire(SessionId $id): void
+    {
+        $this->handler->expire($id);
+    }
+
+    /**
+     * Retrieve session metadata (creation time, last modification, expiry).
+     *
+     * Pass-through to {@see SessionHandler::getMetadata()}. Returns null
+     * when the backend supports metadata but no record matches the id.
+     *
+     * @throws CapabilityException If the backend does not support metadata.
+     */
+    public function getMetadata(SessionId $id): ?SessionMetadata
+    {
+        return $this->handler->getMetadata($id);
     }
 
     /**
      * Locate every session whose authenticated user matches $userId.
      *
-     * Iterates the backend and inspects each payload. Sessions that fail
-     * to deserialize are silently skipped — they're invalid and should be
-     * cleaned up by GC, not reported here.
+     * Iterates and inspects each payload. Sessions that fail to load are
+     * silently skipped — they're invalid, GC will clean them.
      *
      * @return list<SessionId>
      *
@@ -144,8 +161,8 @@ class SessionAdministrator
      * Forcibly destroy all of $userId's sessions, optionally keeping one.
      *
      * Used by "sign out everywhere" flows and by password-change handlers
-     * that want to invalidate other live sessions while leaving the
-     * current one intact.
+     * that invalidate other live sessions while leaving the caller's
+     * current session intact.
      *
      * @param SessionId|null $exceptId  Session to keep (typically the
      *                                  caller's current session ID).
