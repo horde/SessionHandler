@@ -49,9 +49,23 @@ final class BuiltinBackend implements SessionStorageBackend
     }
 
     /**
-     * No-op: PHP's built-in session handler writes the data natively.
+     * Persist session data to PHP's default sess_ file layout.
+     *
+     * When Horde registers {@see \Horde\SessionHandler\SessionHandler} as
+     * PHP's save handler, this backend must write the blob itself — PHP no
+     * longer invokes the native handler directly.
      */
-    public function save(SessionId $id, SerializedSessionPayload $payload, DateTimeImmutable $expiresAt): void {}
+    public function save(SessionId $id, SerializedSessionPayload $payload, DateTimeImmutable $expiresAt): void
+    {
+        $file = $this->filePath($id);
+        $written = @file_put_contents($file, $payload->getData(), LOCK_EX);
+
+        if ($written === false) {
+            throw new \RuntimeException(
+                sprintf('Failed to write session file "%s"', $file)
+            );
+        }
+    }
 
     public function delete(SessionId $id): void
     {
