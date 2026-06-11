@@ -25,7 +25,7 @@
         "sessions",
         "sessionless_sessions"
     ],
-    "time": "2026-06-10",
+    "time": "2026-06-11",
     "repositories": [],
     "require": {
         "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",

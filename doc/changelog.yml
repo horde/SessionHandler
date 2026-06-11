@@ -1,4 +1,16 @@
 ---
+3.0.0-RC1:
+  api: 3.0.0-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-06-11
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    feat: Make BuiltinBackend read-write-compatible with PHP's original sessionhandler
+    fix(builtin): persist sess files with custom save handler
 3.0.0-beta3:
   api: 3.0.0-beta3
   state:
@@ -263,6 +275,17 @@
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
     [mms] Use new Horde_Test layout.
+2.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 5.
 2.0.0-beta2:
   api: 1.0.0
   state:
@@ -299,17 +322,6 @@
   notes: |
     Original version string was 2.0.0alpha1
     First alpha release for Horde 5.
-2.0.0:
-  api: 1.0.0
-  state:
-    release: stable
-    api: stable
-  date: 2012-10-30
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 5.
 1.0.5:
   api: 1.0.0
   state:
@@ -368,6 +380,41 @@
   notes: |
     [mms] Call garbage collection before grabbing list of active sessions.
     [mms] Fix obtaining session information from more than one session.
+1.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 4.
+1.0.0-RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Original version string was 1.0.0RC2
+    Second release candidate for Horde 4.
+1.0.0-RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Original version string was 1.0.0RC1
+    First release candidate for Horde 4.
 1.0.0-beta1:
   api: 1.0.0
   state:
@@ -402,41 +449,6 @@
     Use horde/Db to access SQL databases.
     Do not rely on Horde::logMessage().
     Removed Horde-specific session counting script.
-1.0.0-RC2:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Original version string was 1.0.0RC2
-    Second release candidate for Horde 4.
-1.0.0-RC1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-22
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Original version string was 1.0.0RC1
-    First release candidate for Horde 4.
-1.0.0:
-  api: 1.0.0
-  state:
-    release: stable
-    api: stable
-  date: 2011-04-06
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 4.
 0.0.3:
   api: 0.0.3
   state:
