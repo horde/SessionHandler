@@ -1,4 +1,15 @@
 ---
+3.0.0-RC2:
+  api: 3.0.0-RC2
+  state:
+    release: RC
+    api: RC
+  date: 2026-06-12
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    feat(serializer): pure-PHP session-data serializer
 3.0.0-RC1:
   api: 3.0.0-RC1
   state:
