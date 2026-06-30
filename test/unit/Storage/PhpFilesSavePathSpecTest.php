@@ -51,7 +51,7 @@ class PhpFilesSavePathSpecTest extends TestCase
         $spec = PhpFilesSavePathSpec::parse('2;0700;/var/lib/php/sessions');
 
         self::assertSame(2, $spec->depth);
-        self::assertSame(0700, $spec->mode);
+        self::assertSame(0o700, $spec->mode);
         self::assertSame('/var/lib/php/sessions', $spec->basePath);
     }
 

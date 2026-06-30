@@ -48,7 +48,7 @@ final class PhpFilesSavePathSpec
     public const MAX_DEPTH = 32;
 
     /** Default directory creation mode when MODE is omitted. */
-    public const DEFAULT_MODE = 0600;
+    public const DEFAULT_MODE = 0o600;
 
     /**
      * @param int    $depth    Number of single-hex-character subdirectory
@@ -191,7 +191,7 @@ final class PhpFilesSavePathSpec
         }
 
         $mode = octdec($raw);
-        if ($mode < 0 || $mode > 07777) {
+        if ($mode < 0 || $mode > 0o7777) {
             throw new InvalidArgumentException(sprintf(
                 'session.save_path "%s" MODE %s is outside the valid '
                 . 'range 0..07777',

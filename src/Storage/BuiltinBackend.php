@@ -81,7 +81,7 @@ use RuntimeException;
 final class BuiltinBackend implements SessionStorageBackend
 {
     private const FILE_PREFIX = 'sess_';
-    private const FILE_MODE = 0600;
+    private const FILE_MODE = 0o600;
     private const TEMP_PREFIX = '.sess_tmp_';
 
     private readonly PhpFilesSavePathSpec $spec;
