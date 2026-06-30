@@ -9,20 +9,17 @@ list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_SessionHandler
 authors:
-  -
-    name: Jan Schneider
+  - name: Jan Schneider
     user: jan
     email: jan@horde.org
     active: true
     role: lead
-  -
-    name: Chuck Hagenbuch
+  - name: Chuck Hagenbuch
     user: chuck
     email: chuck@horde.org
     active: false
     role: lead
-  -
-    name: Michael Slusarz
+  - name: Michael Slusarz
     user: slusarz
     email: slusarz@horde.org
     active: false
@@ -58,3 +55,34 @@ keywords:
   - sessions
   - sessionless_sessions
 vendor: horde
+ci-platform:
+  '8.0':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.1':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.2':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.3':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.4':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.5':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+  '8.6':
+    - php: ^7.4 || ^8
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+ci-platform-flags:
+  needs_installer_plugin: true
