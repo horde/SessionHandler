@@ -16,7 +16,7 @@ use Horde\SessionHandler\Exception\CapabilityException;
 use Horde\SessionHandler\PhpSessionSerializer;
 use Horde\SessionHandler\SessionHandler;
 use Horde\SessionHandler\SessionId;
-use Horde\SessionHandler\Storage\BuiltinBackend;
+use Horde\SessionHandler\Storage\ExternalBackend;
 use Horde\SessionHandler\Storage\FileBackend;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -178,9 +178,18 @@ class SessionHandlerTest extends TestCase
     #[Test]
     public function testCapabilityExceptionForListSessions(): void
     {
-        $builtinBackend = new BuiltinBackend($this->tempDir);
+        /* ExternalBackend wraps arbitrary PHP SessionHandlerInterface
+         * callbacks and cannot enumerate; a good fit for exercising
+         * the CapabilityException path. BuiltinBackend used to be
+         * non-iterable and was the fixture here, but now implements
+         * IterableSessionBackend by walking the save-path tree. */
+        $nonIterable = new ExternalBackend(
+            \Closure::fromCallable(function (): ?string { return null; }),
+            \Closure::fromCallable(function (): void {}),
+            \Closure::fromCallable(function (): void {}),
+        );
         $handler = new SessionHandler(
-            backend: $builtinBackend,
+            backend: $nonIterable,
             serializer: new PhpSessionSerializer(),
             sessionFactory: new DefaultSessionFactory(),
         );

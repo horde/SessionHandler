@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace Horde\SessionHandler\Test\unit\Storage;
 
 use DateTimeImmutable;
+use Horde\SessionHandler\Exception\SessionException;
+use Horde\SessionHandler\IterableSessionBackend;
 use Horde\SessionHandler\SerializedSessionPayload;
 use Horde\SessionHandler\SessionId;
 use Horde\SessionHandler\Storage\BuiltinBackend;
@@ -225,5 +227,180 @@ class BuiltinBackendTest extends TestCase
         $backend->save(new SessionId('abc'), $this->payload('x'), $this->expiresAt);
 
         self::assertFileExists($this->tempDir . '/a/sess_abc');
+    }
+
+    // ---------------------------------------------------------------
+    // Iteration
+    // ---------------------------------------------------------------
+
+    #[Test]
+    public function testImplementsIterableSessionBackend(): void
+    {
+        $backend = new BuiltinBackend($this->tempDir);
+        self::assertInstanceOf(IterableSessionBackend::class, $backend);
+    }
+
+    #[Test]
+    public function testListSessionsFlatYieldsIds(): void
+    {
+        $backend = new BuiltinBackend($this->tempDir);
+        $backend->save(new SessionId('aaa'), $this->payload('1'), $this->expiresAt);
+        $backend->save(new SessionId('bbb'), $this->payload('2'), $this->expiresAt);
+
+        $ids = [];
+        foreach ($backend->listSessions() as $id) {
+            $ids[] = $id->id;
+        }
+        sort($ids);
+
+        self::assertSame(['aaa', 'bbb'], $ids);
+    }
+
+    #[Test]
+    public function testListSessionsSkipsNonSessFiles(): void
+    {
+        $backend = new BuiltinBackend($this->tempDir);
+        $backend->save(new SessionId('good'), $this->payload('x'), $this->expiresAt);
+        // Foreign files that must not surface as session ids.
+        file_put_contents($this->tempDir . '/README', 'not a session');
+        file_put_contents($this->tempDir . '/.hidden', 'not a session');
+
+        $ids = [];
+        foreach ($backend->listSessions() as $id) {
+            $ids[] = $id->id;
+        }
+
+        self::assertSame(['good'], $ids);
+    }
+
+    #[Test]
+    public function testListSessionsRecursesIntoHashedTree(): void
+    {
+        // Depth 2, ids "0ab..." and "1cd..." — mkdir the two subdirs
+        // they hash into, then save.
+        $backend = new BuiltinBackend('2;' . $this->tempDir);
+        mkdir($this->tempDir . '/0/a', 0o755, true);
+        mkdir($this->tempDir . '/1/c', 0o755, true);
+        $backend->save(new SessionId('0abc'), $this->payload('x'), $this->expiresAt);
+        $backend->save(new SessionId('1cde'), $this->payload('y'), $this->expiresAt);
+
+        $ids = [];
+        foreach ($backend->listSessions() as $id) {
+            $ids[] = $id->id;
+        }
+        sort($ids);
+
+        self::assertSame(['0abc', '1cde'], $ids);
+    }
+
+    #[Test]
+    public function testListSessionsSkipsMissingHashSubdirectories(): void
+    {
+        // Depth 2 but no subdirectories yet — mod_files-compatible:
+        // never-created buckets mean no sessions, not an error.
+        $backend = new BuiltinBackend('2;' . $this->tempDir);
+
+        $ids = iterator_to_array($backend->listSessions());
+
+        self::assertSame([], $ids);
+    }
+
+    #[Test]
+    public function testListSessionsThrowsWhenBaseIsNotADirectory(): void
+    {
+        $file = $this->tempDir . '/not_a_dir';
+        file_put_contents($file, 'x');
+
+        $backend = new BuiltinBackend($file);
+
+        $this->expectException(SessionException::class);
+        $this->expectExceptionMessageMatches('/is not a directory/');
+        $this->expectExceptionMessageMatches('/' . preg_quote($file, '/') . '/');
+
+        iterator_to_array($backend->listSessions());
+    }
+
+    #[Test]
+    public function testListSessionsThrowsWhenBaseIsUnreadable(): void
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            self::markTestSkipped('permission tests do not apply to root');
+        }
+
+        chmod($this->tempDir, 0o000);
+        // Verify chmod actually stripped the read bit (some filesystems
+        // ignore Unix mode bits).
+        if (is_readable($this->tempDir)) {
+            chmod($this->tempDir, 0o755);
+            self::markTestSkipped('filesystem does not honour chmod(0)');
+        }
+
+        try {
+            $backend = new BuiltinBackend($this->tempDir);
+            $this->expectException(SessionException::class);
+            $this->expectExceptionMessageMatches('/not readable/');
+            $this->expectExceptionMessageMatches('/' . preg_quote($this->tempDir, '/') . '/');
+            iterator_to_array($backend->listSessions());
+        } finally {
+            /* Restore mode so tearDown()'s recursive remove works. */
+            chmod($this->tempDir, 0o755);
+        }
+    }
+
+    #[Test]
+    public function testListSessionsThrowsWhenHashSubdirectoryIsUnreadable(): void
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            self::markTestSkipped('permission tests do not apply to root');
+        }
+
+        $backend = new BuiltinBackend('1;' . $this->tempDir);
+        mkdir($this->tempDir . '/a', 0o755, true);
+        $backend->save(new SessionId('abc'), $this->payload('x'), $this->expiresAt);
+        chmod($this->tempDir . '/a', 0o000);
+        if (is_readable($this->tempDir . '/a')) {
+            chmod($this->tempDir . '/a', 0o755);
+            self::markTestSkipped('filesystem does not honour chmod(0)');
+        }
+
+        try {
+            $this->expectException(SessionException::class);
+            $this->expectExceptionMessageMatches('/subdirectory/');
+            $this->expectExceptionMessageMatches('/not readable/');
+            iterator_to_array($backend->listSessions());
+        } finally {
+            chmod($this->tempDir . '/a', 0o755);
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // load() error surfacing
+    // ---------------------------------------------------------------
+
+    #[Test]
+    public function testLoadThrowsWhenSessionFileIsUnreadable(): void
+    {
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            self::markTestSkipped('permission tests do not apply to root');
+        }
+
+        $backend = new BuiltinBackend($this->tempDir);
+        $id = new SessionId('locked');
+        $backend->save($id, $this->payload('x'), $this->expiresAt);
+        $file = $this->tempDir . '/sess_locked';
+        chmod($file, 0o000);
+        if (is_readable($file)) {
+            chmod($file, 0o600);
+            self::markTestSkipped('filesystem does not honour chmod(0)');
+        }
+
+        try {
+            $this->expectException(SessionException::class);
+            $this->expectExceptionMessageMatches('/not readable/');
+            $this->expectExceptionMessageMatches('/' . preg_quote($file, '/') . '/');
+            $backend->load($id);
+        } finally {
+            chmod($file, 0o600);
+        }
     }
 }
