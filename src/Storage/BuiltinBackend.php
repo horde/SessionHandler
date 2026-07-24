@@ -14,9 +14,14 @@ declare(strict_types=1);
 namespace Horde\SessionHandler\Storage;
 
 use DateTimeImmutable;
+use DirectoryIterator;
+use Generator;
+use Horde\SessionHandler\Exception\SessionException;
+use Horde\SessionHandler\IterableSessionBackend;
 use Horde\SessionHandler\SerializedSessionPayload;
 use Horde\SessionHandler\SessionId;
 use Horde\SessionHandler\SessionStorageBackend;
+use InvalidArgumentException;
 use RuntimeException;
 
 /**
@@ -67,18 +72,19 @@ use RuntimeException;
  * {@see RuntimeException} with the exact path so the misconfiguration is
  * obvious.
  *
- * # Garbage collection
+ * # Iteration and garbage collection
  *
- * Not implemented. This backend does not declare
- * {@see \Horde\SessionHandler\IterableSessionBackend} or
- * {@see \Horde\SessionHandler\SessionMetadataBackend}, so
- * {@see \Horde\SessionHandler\SessionHandler::gc()} returns false and PHP's
- * probabilistic GC is a no-op. Operators relying on `Builtin` must run
+ * Implements {@see \Horde\SessionHandler\IterableSessionBackend} by
+ * walking the configured save-path tree and yielding a {@see SessionId}
+ * per `sess_*` file found. Traversal is lazy (a Generator); admin pages
+ * can process large session pools without materialising the full list.
+ * Does not declare {@see \Horde\SessionHandler\SessionMetadataBackend},
+ * so {@see \Horde\SessionHandler\SessionHandler::gc()} still relies on
  * external cleanup (cron, `systemd-tmpfiles`, the OS `/tmp` cleaner, or
- * similar). Adding GC that walks the hashed tree is a future capability
- * tracked separately.
+ * similar). GC that walks the tree during iteration is a future
+ * capability tracked separately.
  */
-final class BuiltinBackend implements SessionStorageBackend
+final class BuiltinBackend implements SessionStorageBackend, IterableSessionBackend
 {
     private const FILE_PREFIX = 'sess_';
     private const FILE_MODE = 0o600;
@@ -106,9 +112,35 @@ final class BuiltinBackend implements SessionStorageBackend
             return null;
         }
 
+        if (!is_readable($file)) {
+            throw new SessionException(sprintf(
+                'Session file "%s" exists but is not readable by the PHP '
+                . 'user (check filesystem permissions and umask on the '
+                . 'save_path).',
+                $file,
+            ));
+        }
+
         $contents = @file_get_contents($file);
 
-        if ($contents === false || $contents === '') {
+        if ($contents === false) {
+            /* file_get_contents on a file that passed is_file() and
+             * is_readable() moments ago most often means a concurrent
+             * unlink (session GC) or a filesystem-level I/O error.
+             * Surface the path so the caller can act; do not silently
+             * skip. */
+            $err = error_get_last();
+            throw new SessionException(sprintf(
+                'Failed to read session file "%s"%s',
+                $file,
+                isset($err['message']) ? ': ' . $err['message'] : '.',
+            ));
+        }
+
+        if ($contents === '') {
+            /* Freshly-created but never-written session file. Treated
+             * as "no data" rather than an error; the session will be
+             * populated on first write. */
             return null;
         }
 
@@ -171,6 +203,123 @@ final class BuiltinBackend implements SessionStorageBackend
     public function delete(SessionId $id): void
     {
         @unlink($this->filePath($id));
+    }
+
+    /**
+     * Enumerate all session ids currently present on disk.
+     *
+     * Walks the configured save-path tree; for depth 0 that is a flat
+     * scan of {@see PhpFilesSavePathSpec::basePath}, for depth N a
+     * recursive walk of the N-level single-hex-char subdirectory tree.
+     *
+     * Errors are surfaced with the exact path involved so that an
+     * admin who sees the failure can act on it directly:
+     *
+     *   - Base path missing or not a directory: throw immediately,
+     *     before yielding anything.
+     *   - Base or subdirectory unreadable (permissions): throw naming
+     *     that specific directory.
+     *   - Subdirectory expected under the hashed layout but absent on
+     *     disk: skipped silently. PHP's mod_files also tolerates this
+     *     because it lazily creates directories on write.
+     *   - Filename that does not parse as a SessionId (e.g., a stray
+     *     `sess_` prefix on something unrelated): skipped silently.
+     *     Matches FileBackend's tolerance.
+     *
+     * @return Generator<SessionId>
+     * @throws SessionException on unreadable directories.
+     */
+    public function listSessions(): Generator
+    {
+        $base = $this->spec->basePath;
+
+        if (!is_dir($base)) {
+            throw new SessionException(sprintf(
+                'Session save_path "%s" is not a directory. Cannot list '
+                . 'sessions.',
+                $base,
+            ));
+        }
+        if (!is_readable($base)) {
+            throw new SessionException(sprintf(
+                'Session save_path "%s" is not readable by the PHP user '
+                . '(check filesystem permissions). Cannot list sessions.',
+                $base,
+            ));
+        }
+
+        yield from $this->listSessionsIn($base, $this->spec->depth);
+    }
+
+    /**
+     * Recursive walk helper for {@see listSessions}. At depth 0 yields
+     * SessionId per `sess_*` file in $dir; otherwise recurses into each
+     * of the 16 single-hex-char subdirectories that PHP's mod_files
+     * would use for this level.
+     *
+     * @return Generator<SessionId>
+     */
+    private function listSessionsIn(string $dir, int $remainingDepth): Generator
+    {
+        if ($remainingDepth > 0) {
+            for ($i = 0; $i < 16; $i++) {
+                $sub = $dir . '/' . dechex($i);
+                if (!file_exists($sub)) {
+                    /* PHP mod_files does not pre-create these; a missing
+                     * subdirectory just means no sessions have hashed
+                     * into that bucket yet. */
+                    continue;
+                }
+                if (!is_dir($sub)) {
+                    throw new SessionException(sprintf(
+                        'Session save_path subdirectory "%s" exists but '
+                        . 'is not a directory; the save_path tree is '
+                        . 'inconsistent.',
+                        $sub,
+                    ));
+                }
+                if (!is_readable($sub)) {
+                    throw new SessionException(sprintf(
+                        'Session save_path subdirectory "%s" is not '
+                        . 'readable by the PHP user (check filesystem '
+                        . 'permissions).',
+                        $sub,
+                    ));
+                }
+                yield from $this->listSessionsIn($sub, $remainingDepth - 1);
+            }
+            return;
+        }
+
+        try {
+            $it = new DirectoryIterator($dir);
+        } catch (RuntimeException $e) {
+            throw new SessionException(sprintf(
+                'Failed to open session save_path directory "%s": %s',
+                $dir,
+                $e->getMessage(),
+            ), 0, $e);
+        }
+
+        $prefixLength = strlen(self::FILE_PREFIX);
+
+        foreach ($it as $entry) {
+            if ($entry->isDot() || !$entry->isFile()) {
+                continue;
+            }
+            $name = $entry->getFilename();
+            if (!str_starts_with($name, self::FILE_PREFIX)) {
+                continue;
+            }
+            $idString = substr($name, $prefixLength);
+            try {
+                yield new SessionId($idString);
+            } catch (InvalidArgumentException) {
+                /* Stray file matching sess_* whose suffix is not a
+                 * valid session id. Skip; matches FileBackend. */
+                continue;
+            }
+        }
     }
 
     private function filePath(SessionId $id): string
